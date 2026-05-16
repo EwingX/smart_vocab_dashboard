@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>考研英语智能极简词典</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', '"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', '"Fira Code"', 'Consolas', '"SF Mono"', 'monospace'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* ---- 卡片动画 ---- */
+    @keyframes cardEnter {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0);    }
+    }
+
+    /* ---- 模态框毛玻璃遮罩 ---- */
+    .modal-overlay {
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .dark .modal-overlay {
+      background: rgba(0,0,0,0.55);
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.94) translateY(20px); }
+      to   { opacity: 1; transform: scale(1)   translateY(0);    }
+    }
+    @keyframes modalOut {
+      from { opacity: 1; transform: scale(1)   translateY(0);    }
+      to   { opacity: 0; transform: scale(0.94) translateY(20px); }
+    }
+
+    /* ---- 晋升按钮脉冲 ---- */
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0 rgba(99,102,241,0.4); }
+      70%  { box-shadow: 0 0 0 10px rgba(99,102,241,0);   }
+      100% { box-shadow: 0 0 0 0 rgba(99,102,241,0);   }
+    }
+
+    /* ---- Toast ---- */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 9999;
+      padding: 0.7rem 1.4rem;
+      border-radius: 0.6rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      animation: toastIn 0.35s ease, toastOut 0.35s ease 2.6s forwards;
+      pointer-events: none;
+    }
+    .toast-success { background: #059669; }
+    .toast-error   { background: #dc2626; }
+
+    @keyframes toastIn  { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes toastOut { from { opacity:1; transform:translateY(0);   } to { opacity:0; transform:translateY(16px); } }
+
+    /* ---- 滚动条 ---- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+    .dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+
+    /* ---- 词性筛选按钮 ---- */
+    .pos-chip {
+      transition: all 0.2s ease;
+    }
+    .pos-chip.active {
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#fafaf9] dark:bg-[#0f0f13] text-gray-800 dark:text-gray-200 antialiased">
+
+  <!-- ================================================================== -->
+  <!--  Top Header                                                         -->
+  <!-- ================================================================== -->
+  <header class="sticky top-0 z-40 border-b border-gray-200/70 dark:border-gray-800/70 bg-white/80 dark:bg-[#0f0f13]/80 backdrop-blur-lg">
+    <div class="px-5 py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 shrink-0">
+        <h1 class="text-base font-semibold tracking-tight text-gray-900 dark:text-gray-100">
+          考研极简词典
+        </h1>
+        <span id="wordCount" class="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">0 词</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <!-- 移动端侧栏切换 -->
+        <button id="mobilePosToggle" title="词性筛选"
+                class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-xs text-gray-500">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 4h18M3 8h12M3 12h18M3 16h12M3 20h18"/></svg>
+        </button>
+        <button id="mobileStatsToggle" title="记忆统计"
+                class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-xs text-gray-500">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        </button>
+        <button id="themeToggle"
+                class="w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                title="切换暗黑/明亮模式" aria-label="切换暗黑模式">
+          <svg id="iconSun" class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          </svg>
+          <svg id="iconMoon" class="w-4 h-4 text-gray-300 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================================================================== -->
+  <!--  三栏主体布局                                                        -->
+  <!-- ================================================================== -->
+  <div class="flex flex-col lg:flex-row">
+
+    <!-- ===== 左侧边栏：词性分类器 (桌面端固定竖排 / 移动端可折叠横排) ===== -->
+    <aside id="leftSidebar" class="
+      lg:block lg:w-56 lg:sticky lg:top-[57px] lg:max-h-[calc(100vh-57px)] lg:overflow-y-auto lg:border-r lg:border-gray-200/70 dark:lg:border-gray-800/70 lg:bg-white/50 dark:lg:bg-[#0f0f13]/50
+      hidden
+    ">
+      <div class="p-4">
+        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">词性分类</p>
+        <nav id="posNav" class="space-y-1">
+          <!-- JS 动态填充 -->
+        </nav>
+      </div>
+    </aside>
+
+    <!-- ===== 中部主区域 ===== -->
+    <main class="flex-1 min-w-0 px-5 py-6">
+
+      <!-- 搜索 + 添加单词 -->
+      <div class="mb-6 space-y-3">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="relative flex-1">
+            <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input id="searchInput" type="text" placeholder="搜索单词或释义…"
+                   class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400/30 transition-all">
+          </div>
+          <div class="flex gap-2 sm:w-72">
+            <input id="addWordInput" type="text" placeholder="输入新单词…"
+                   class="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400/30 transition-all"
+                   autocomplete="off">
+            <button id="addWordBtn"
+                    class="shrink-0 px-5 py-2.5 rounded-xl bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium hover:bg-gray-800 dark:hover:bg-gray-200 transition-all active:scale-95">
+              生成卡片
+            </button>
+          </div>
+        </div>
+
+        <!-- 当前激活的筛选标签（移动端可见） -->
+        <div id="activeFilters" class="flex flex-wrap items-center gap-2 lg:hidden"></div>
+      </div>
+
+      <!-- 卡片网格 -->
+      <div id="cardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+      </div>
+
+      <!-- 空状态 -->
+      <div id="emptyState" class="hidden text-center py-24">
+        <p class="text-4xl mb-4 select-none">📭</p>
+        <p class="text-gray-400 dark:text-gray-500 text-sm">没有匹配的单词</p>
+        <p class="text-gray-300 dark:text-gray-600 text-xs mt-1">试试其他筛选条件，或添加新单词</p>
+      </div>
+
+      <!-- 移动端统计面板（折叠态） -->
+      <div id="mobileStatsPanel" class="lg:hidden hidden mt-6 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+      </div>
+    </main>
+
+    <!-- ===== 右侧边栏：记忆曲线追踪面板 ===== -->
+    <aside id="rightSidebar" class="
+      lg:block lg:w-60 lg:sticky lg:top-[57px] lg:max-h-[calc(100vh-57px)] lg:overflow-y-auto lg:border-l lg:border-gray-200/70 dark:lg:border-gray-800/70 lg:bg-white/50 dark:lg:bg-[#0f0f13]/50
+      hidden
+    ">
+      <div class="p-4">
+        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">记忆追踪</p>
+        <div id="memoryStats" class="space-y-1.5">
+          <!-- JS 动态填充 -->
+        </div>
+        <div class="mt-5 pt-4 border-t border-gray-100 dark:border-gray-800">
+          <div class="text-xs text-gray-400 dark:text-gray-500 mb-1">掌握进度</div>
+          <div class="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+            <div id="masteryBar" class="h-full bg-indigo-500 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <div id="masteryPercent" class="text-xs text-gray-400 dark:text-gray-500 mt-1">0%</div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Toast 容器 -->
+  <div id="toastContainer"></div>
+
+  <!-- ================================================================== -->
+  <!--  大卡片模态框 (Modal)                                                 -->
+  <!-- ================================================================== -->
+  <div id="wordModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" style="display: none;">
+    <!-- 毛玻璃遮罩 -->
+    <div id="modalOverlay" class="modal-overlay absolute inset-0"></div>
+
+    <!-- 弹窗主体 -->
+    <div id="modalBody" class="relative w-[95vw] lg:w-2/3 max-w-4xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white dark:bg-[#1a1a22] border border-gray-200/60 dark:border-gray-700/60 shadow-2xl"
+         style="animation: modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;">
+      <!-- 关闭按钮 -->
+      <button id="modalClose" class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full border border-gray-200 dark:border-gray-600 bg-white/80 dark:bg-gray-800/80 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10"
+              title="关闭" aria-label="关闭弹窗">
+        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+
+      <!-- 弹窗内容 -->
+      <div class="p-8 lg:p-10">
+        <!-- 英文单词 -->
+        <h2 id="modalWord" class="text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mb-2"></h2>
+
+        <!-- 音标 -->
+        <p id="modalPhonetic" class="text-lg text-gray-400 dark:text-gray-500 font-mono mb-8"></p>
+
+        <!-- 分割线 -->
+        <div class="w-12 h-px bg-gray-200 dark:bg-gray-700 mb-8"></div>
+
+        <!-- 释义区 -->
+        <div class="mb-10">
+          <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">释义</h3>
+          <p id="modalDefinition" class="text-xl lg:text-2xl text-gray-800 dark:text-gray-200 leading-relaxed"></p>
+        </div>
+
+        <!-- 例句区 -->
+        <div class="mb-6">
+          <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">考研真题例句</h3>
+          <blockquote id="modalSentence" class="text-lg text-gray-700 dark:text-gray-300 leading-relaxed italic border-l-2 border-gray-300 dark:border-gray-600 pl-5"></blockquote>
+        </div>
+
+        <!-- 例句翻译 -->
+        <div class="mb-10">
+          <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">中文翻译</h3>
+          <p id="modalTranslation" class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed"></p>
+        </div>
+
+        <!-- 底栏：熟记状态 + 晋升按钮 -->
+        <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-800">
+          <span id="modalStageLabel" class="text-sm text-gray-500 dark:text-gray-400"></span>
+          <button id="modalPromoteBtn"
+                  class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95"
+                  title="晋升熟记阶段">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+            <span id="modalPromoteText">晋升</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================================================== -->
+  <!--  JavaScript                                                         -->
+  <!-- ================================================================== -->
+  <script>
+  (function () {
+    /* ================================================================== */
+    /*  常量与状态                                                          */
+    /* ================================================================== */
+    var words        = [];
+    var posFilter    = 'all';     // 词性过滤
+    var stageFilter  = 'all';     // 熟记阶段过滤: 'all' | '0' | '1' | '2' | '3'
+    var search       = '';
+    var modalIndex   = -1;        // 当前弹窗展示的单词索引
+
+    var STAGE_LABELS  = ['未掌握', '熟记一次', '熟记两次', '已斩获'];
+    var STAGE_SHORT   = ['未掌握', '一次', '两次', '已斩获'];
+
+    // 徽章色彩 (由浅变深)
+    var BADGE_CLASSES = [
+      'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700',
+      'bg-amber-50 dark:bg-amber-900/25 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800',
+      'bg-emerald-50 dark:bg-emerald-900/25 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800',
+      'bg-indigo-50 dark:bg-indigo-900/25 text-indigo-700 dark:text-indigo-400 border-indigo-200 dark:border-indigo-800'
+    ];
+
+    // 晋升按钮色彩
+    var PROMOTE_CLASSES = [
+      'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-amber-50 dark:hover:bg-amber-900/30 hover:text-amber-700 dark:hover:text-amber-400',
+      'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-700 dark:hover:text-emerald-400',
+      'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 hover:text-indigo-700 dark:hover:text-indigo-400',
+      'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-400'
+    ];
+
+    var POS_DEFS = [
+      { key: 'n',    label: '名词 (n.)' },
+      { key: 'v',    label: '动词 (v.)' },
+      { key: 'adj',  label: '形容词 (adj.)' },
+      { key: 'adv',  label: '副词 (adv.)' },
+      { key: 'prep', label: '介词 (prep.)' },
+      { key: 'conj', label: '连词 (conj.)' },
+      { key: 'pron', label: '代词 (pron.)' },
+      { key: 'art',  label: '冠词 (art.)' },
+      { key: 'num',  label: '数词 (num.)' },
+      { key: 'int',  label: '感叹词 (int.)' },
+    ];
+
+    /* ================================================================== */
+    /*  DOM 引用                                                            */
+    /* ================================================================== */
+    var grid            = document.getElementById('cardGrid');
+    var empty           = document.getElementById('emptyState');
+    var searchInp       = document.getElementById('searchInput');
+    var addInp          = document.getElementById('addWordInput');
+    var addBtn          = document.getElementById('addWordBtn');
+    var countSpan       = document.getElementById('wordCount');
+    var toggleBtn       = document.getElementById('themeToggle');
+    var iconSun         = document.getElementById('iconSun');
+    var iconMoon        = document.getElementById('iconMoon');
+    var posNav          = document.getElementById('posNav');
+    var memoryStats     = document.getElementById('memoryStats');
+    var masteryBar      = document.getElementById('masteryBar');
+    var masteryPercent  = document.getElementById('masteryPercent');
+    var activeFilters   = document.getElementById('activeFilters');
+    var mobileStatsPanel = document.getElementById('mobileStatsPanel');
+    var leftSidebar     = document.getElementById('leftSidebar');
+    var rightSidebar    = document.getElementById('rightSidebar');
+
+    // 模态框
+    var wordModal       = document.getElementById('wordModal');
+    var modalOverlay    = document.getElementById('modalOverlay');
+    var modalClose      = document.getElementById('modalClose');
+    var modalBody       = document.getElementById('modalBody');
+    var modalWord       = document.getElementById('modalWord');
+    var modalPhonetic   = document.getElementById('modalPhonetic');
+    var modalDefinition = document.getElementById('modalDefinition');
+    var modalSentence   = document.getElementById('modalSentence');
+    var modalTranslation = document.getElementById('modalTranslation');
+    var modalStageLabel = document.getElementById('modalStageLabel');
+    var modalPromoteBtn = document.getElementById('modalPromoteBtn');
+    var modalPromoteText = document.getElementById('modalPromoteText');
+
+    /* ================================================================== */
+    /*  Toast                                                              */
+    /* ================================================================== */
+    function toast(msg, type) {
+      type = type || 'success';
+      var el = document.createElement('div');
+      el.className = 'toast toast-' + type;
+      el.textContent = msg;
+      document.getElementById('toastContainer').appendChild(el);
+      setTimeout(function () { el.remove(); }, 3000);
+    }
+
+    /* ================================================================== */
+    /*  暗黑模式                                                            */
+    /* ================================================================== */
+    function applyTheme(dark) {
+      document.documentElement.classList.toggle('dark', dark);
+      iconSun.classList.toggle('hidden', dark);
+      iconMoon.classList.toggle('hidden', !dark);
+      try { localStorage.setItem('kaoyan-theme', dark ? 'dark' : 'light'); } catch (_) {}
+    }
+    toggleBtn.addEventListener('click', function () {
+      applyTheme(!document.documentElement.classList.contains('dark'));
+    });
+    (function initTheme() {
+      var saved;
+      try { saved = localStorage.getItem('kaoyan-theme'); } catch (_) {}
+      if (saved === 'dark')      applyTheme(true);
+      else if (saved === 'light') applyTheme(false);
+      else applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    })();
+
+    /* ================================================================== */
+    /*  词性提取                                                            */
+    /* ================================================================== */
+    function extractPosTags(definition) {
+      var matches = definition.match(/\b(n|v|adj|adv|prep|conj|pron|art|num|int|vi|vt)\./gi);
+      if (!matches) return ['other'];
+      return matches.map(function(m) { return m.replace(/\.$/,'').toLowerCase(); });
+    }
+
+    /* ================================================================== */
+    /*  HTML 转义                                                           */
+    /* ================================================================== */
+    function esc(s) {
+      var d = document.createElement('div');
+      d.textContent = s || '';
+      return d.innerHTML;
+    }
+
+    /* ================================================================== */
+    /*  数据加载                                                            */
+    /* ================================================================== */
+    function loadWords() {
+      fetch('/api/words')
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function (data) {
+          words = data;
+          // 确保前端兼容：若后端未迁移则前端兜底
+          words.forEach(function(w) {
+            if (typeof w.mastery_stage === 'undefined') {
+              w.mastery_stage = (w.status === '已熟记') ? 1 : 0;
+            }
+          });
+          renderAll();
+        })
+        .catch(function () {
+          toast('无法加载单词列表，请确认后端已启动', 'error');
+        });
+    }
+
+    /* ================================================================== */
+    /*  综合过滤                                                            */
+    /* ================================================================== */
+    function filteredWords() {
+      return words.filter(function (w, i) {
+        w._index = i;
+
+        // 词性过滤
+        if (posFilter !== 'all') {
+          var tags = extractPosTags(w.definition || '');
+          if (tags.indexOf(posFilter) === -1) return false;
+        }
+
+        // 熟记阶段过滤
+        if (stageFilter !== 'all') {
+          if (w.mastery_stage !== parseInt(stageFilter)) return false;
+        }
+
+        // 搜索过滤：匹配英文单词或释义
+        if (search) {
+          var q = search.toLowerCase();
+          if (w.word.toLowerCase().indexOf(q) === -1 &&
+              (w.definition || '').toLowerCase().indexOf(q) === -1) {
+            return false;
+          }
+        }
+
+        return true;
+      });
+    }
+
+    /* ================================================================== */
+    /*  渲染左侧词性侧栏                                                     */
+    /* ================================================================== */
+    function renderPosSidebar() {
+      // 统计各词性的单词数量
+      var counts = {};
+      POS_DEFS.forEach(function(p) { counts[p.key] = 0; });
+      counts['other'] = 0;
+
+      words.forEach(function(w) {
+        var tags = extractPosTags(w.definition || '');
+        var counted = {};
+        tags.forEach(function(t) {
+          if (!counted[t]) {
+            counts[t] = (counts[t] || 0) + 1;
+            counted[t] = true;
+          }
+        });
+      });
+
+      var html = '';
+
+      // "全部" 按钮
+      html += '<button class="pos-chip w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ' +
+        (posFilter === 'all'
+          ? 'active bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
+          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800') +
+        '" data-pos="all">' +
+        '<span class="flex items-center justify-between">' +
+          '<span>全部</span>' +
+          '<span class="text-xs opacity-60">' + words.length + '</span>' +
+        '</span>' +
+      '</button>';
+
+      // 各词性按钮
+      POS_DEFS.forEach(function(p) {
+        if (counts[p.key] === 0 && posFilter !== p.key) return; // 没有该词性单词时不显示（正在过滤时除外）
+        html += '<button class="pos-chip w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ' +
+          (posFilter === p.key
+            ? 'active bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
+            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800') +
+          '" data-pos="' + p.key + '">' +
+          '<span class="flex items-center justify-between">' +
+            '<span>' + p.label + '</span>' +
+            '<span class="text-xs opacity-60">' + (counts[p.key] || 0) + '</span>' +
+          '</span>' +
+        '</button>';
+      });
+
+      posNav.innerHTML = html;
+
+      // 绑定点击事件
+      posNav.querySelectorAll('.pos-chip').forEach(function(chip) {
+        chip.addEventListener('click', function() {
+          posFilter = chip.dataset.pos;
+          renderAll();
+        });
+      });
+    }
+
+    /* ================================================================== */
+    /*  渲染右侧记忆追踪面板                                                  */
+    /* ================================================================== */
+    function renderMemoryPanel() {
+      var counts = [0, 0, 0, 0];
+      words.forEach(function(w) {
+        var s = w.mastery_stage || 0;
+        if (s >= 0 && s <= 3) counts[s]++;
+      });
+
+      var total = words.length;
+      var mastered = counts[1] + counts[2] + counts[3];
+      var pct = total > 0 ? Math.round((counts[3] / total) * 100) : 0;
+
+      // 进度条
+      if (total > 0) {
+        var weighted = (counts[1] * 0.33 + counts[2] * 0.66 + counts[3] * 1) / total * 100;
+        masteryBar.style.width = Math.round(weighted) + '%';
+      } else {
+        masteryBar.style.width = '0%';
+      }
+      masteryPercent.textContent = pct + '% 已斩获';
+
+      // 各阶段按钮
+      var stageKeys = [
+        { key: '0', label: '未掌握',    color: 'bg-slate-400',      count: counts[0] },
+        { key: '1', label: '熟记一次',  color: 'bg-amber-400',      count: counts[1] },
+        { key: '2', label: '熟记两次',  color: 'bg-emerald-400',    count: counts[2] },
+        { key: '3', label: '已斩获',    color: 'bg-indigo-400',     count: counts[3] },
+      ];
+
+      var html = '';
+      stageKeys.forEach(function(s) {
+        var isActive = stageFilter === s.key;
+        html += '<button class="w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ' +
+          (isActive
+            ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
+            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800') +
+          '" data-stage="' + s.key + '">' +
+          '<span class="flex items-center justify-between">' +
+            '<span class="flex items-center gap-2">' +
+              '<span class="w-2 h-2 rounded-full ' + s.color + '"></span>' +
+              '<span>' + s.label + '</span>' +
+            '</span>' +
+            '<span class="text-xs ' + (isActive ? 'opacity-80' : 'opacity-50') + '">' + s.count + '</span>' +
+          '</span>' +
+        '</button>';
+      });
+
+      memoryStats.innerHTML = html;
+
+      // 绑定点击事件
+      memoryStats.querySelectorAll('button').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          stageFilter = (stageFilter === btn.dataset.stage) ? 'all' : btn.dataset.stage;
+          renderAll();
+        });
+      });
+
+      // 移动端统计面板同步
+      var mobileHtml = '<div class="flex items-center gap-3 flex-wrap">' +
+        '<span class="text-xs text-gray-400 dark:text-gray-500">记忆追踪:</span>';
+      stageKeys.forEach(function(s) {
+        mobileHtml += '<button class="px-2.5 py-1 rounded-lg text-xs font-medium border transition-colors ' +
+          (stageFilter === s.key
+            ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-gray-100'
+            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700') +
+          '" data-stage-mobile="' + s.key + '">' +
+          '<span class="inline-block w-1.5 h-1.5 rounded-full ' + s.color + ' mr-1"></span>' +
+          s.label + ' ' + s.count +
+        '</button>';
+      });
+      mobileHtml += '</div>';
+      mobileStatsPanel.innerHTML = mobileHtml;
+
+      mobileStatsPanel.querySelectorAll('button').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          stageFilter = (stageFilter === btn.dataset.stageMobile) ? 'all' : btn.dataset.stageMobile;
+          renderAll();
+        });
+      });
+    }
+
+    /* ================================================================== */
+    /*  渲染激活筛选标签 (移动端)                                             */
+    /* ================================================================== */
+    function renderActiveFilters() {
+      var chips = [];
+      if (posFilter !== 'all') {
+        var found = POS_DEFS.find(function(p) { return p.key === posFilter; });
+        chips.push({ label: found ? found.label : posFilter, clear: function() { posFilter = 'all'; renderAll(); } });
+      }
+      if (stageFilter !== 'all') {
+        chips.push({ label: STAGE_LABELS[parseInt(stageFilter)], clear: function() { stageFilter = 'all'; renderAll(); } });
+      }
+
+      var html = '';
+      chips.forEach(function(c) {
+        html += '<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-indigo-50 dark:bg-indigo-900/25 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">' +
+          c.label +
+          '<button class="w-3.5 h-3.5 flex items-center justify-center rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800 transition-colors ml-0.5" title="清除">' +
+            '<svg class="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>' +
+          '</button>' +
+        '</span>';
+      });
+      if (chips.length > 0) {
+        html += '<button class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 underline transition-colors">清除全部</button>';
+      }
+
+      activeFilters.innerHTML = html;
+
+      // 绑定清除全部
+      var clearAll = activeFilters.querySelector('button');
+      if (clearAll) {
+        clearAll.addEventListener('click', function() {
+          posFilter = 'all';
+          stageFilter = 'all';
+          renderAll();
+        });
+      }
+
+      // 绑定单个清除
+      activeFilters.querySelectorAll('span button').forEach(function(btn, i) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          if (chips[i]) chips[i].clear();
+        });
+      });
+    }
+
+    /* ================================================================== */
+    /*  渲染单词卡片网格                                                      */
+    /* ================================================================== */
+    function renderCardGrid() {
+      var list = filteredWords();
+      countSpan.textContent = words.length + ' 词';
+
+      if (list.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+      } else {
+        empty.classList.add('hidden');
+      }
+
+      grid.innerHTML = '';
+      list.forEach(function (w, n) {
+        var idx   = w._index;
+        var stage = w.mastery_stage || 0;
+        var badgeClass = BADGE_CLASSES[stage];
+        var promoteClass = PROMOTE_CLASSES[stage];
+        var stageLabel = STAGE_LABELS[stage];
+        var nextStage = stage >= 3 ? 0 : stage + 1;
+        var promoteTitle = stage >= 3 ? '重置为未掌握' : '晋升为「' + STAGE_LABELS[nextStage] + '」';
+
+        var card = document.createElement('div');
+        card.className = 'group relative rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#14141b] hover:shadow-lg hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 cursor-pointer';
+        card.style.animation = 'cardEnter 0.4s ease both';
+        card.style.animationDelay = (n * 0.03) + 's';
+        card.dataset.index = idx;
+
+        card.innerHTML =
+          '<div class="p-4 flex flex-col h-[200px]">' +
+            /* 顶行：单词 + 徽章 */
+            '<div class="flex items-start justify-between gap-2 mb-1">' +
+              '<h3 class="text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100 truncate flex-1">' + esc(w.word) + '</h3>' +
+              '<span class="status-badge shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ' + badgeClass + '">' +
+                stageLabel +
+              '</span>' +
+            '</div>' +
+            /* 音标 */
+            '<p class="text-xs text-gray-400 dark:text-gray-500 font-mono mb-2 truncate">' + esc(w.phonetic || '') + '</p>' +
+            /* 释义 */
+            '<p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed flex-1 overflow-hidden">' + esc(w.definition || '') + '</p>' +
+            /* 底栏：例句预览 + 晋升按钮 */
+            '<div class="flex items-end justify-between mt-3 pt-3 border-t border-gray-50 dark:border-gray-800">' +
+              '<span class="text-xs text-gray-300 dark:text-gray-600 truncate max-w-[75%]">' +
+                (w.sentence ? esc(w.sentence).substring(0, 28) + '…' : '暂无例句') +
+              '</span>' +
+              '<button class="promote-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-lg border transition-all ' + promoteClass + ' border-current/20" ' +
+                'title="' + promoteTitle + '" data-idx="' + idx + '">' +
+                '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+                  '<path d="M13 7l5 5m0 0l-5 5m5-5H6"/>' +
+                '</svg>' +
+              '</button>' +
+            '</div>' +
+          '</div>';
+
+        // 点击卡片 → 打开弹窗
+        card.addEventListener('click', function(e) {
+          if (e.target.closest('.promote-btn')) return;
+          openModal(idx);
+        });
+
+        grid.appendChild(card);
+      });
+
+      // 绑定卡片上的晋升按钮
+      grid.querySelectorAll('.promote-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          promoteStage(parseInt(btn.dataset.idx));
+        });
+      });
+    }
+
+    /* ================================================================== */
+    /*  晋升熟记阶段                                                         */
+    /* ================================================================== */
+    function promoteStage(idx) {
+      var w = words[idx];
+      var oldStage = w.mastery_stage || 0;
+      var newStage = oldStage >= 3 ? 0 : oldStage + 1;
+
+      fetch('/api/words/' + idx, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mastery_stage: newStage })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function () {
+          words[idx].mastery_stage = newStage;
+          renderAll();
+          if (modalIndex === idx) updateModalContent();
+          toast('「' + w.word + '」→ ' + STAGE_LABELS[newStage]);
+        })
+        .catch(function () { toast('状态更新失败', 'error'); });
+    }
+
+    /* ================================================================== */
+    /*  删除单词                                                            */
+    /* ================================================================== */
+    function deleteWord(idx) {
+      var w = words[idx];
+      if (!confirm('确定删除「' + w.word + '」吗？此操作无法撤销。')) return;
+      fetch('/api/words/' + idx, { method: 'DELETE' })
+        .then(function (r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function () {
+          if (modalIndex === idx) closeModal();
+          words.splice(idx, 1);
+          renderAll();
+          toast('已删除「' + w.word + '」');
+        })
+        .catch(function () { toast('删除失败', 'error'); });
+    }
+
+    /* ================================================================== */
+    /*  添加单词                                                            */
+    /* ================================================================== */
+    function addWord() {
+      var raw = addInp.value.trim();
+      if (!raw) { toast('请输入一个英文单词', 'error'); return; }
+
+      addBtn.disabled = true;
+      addBtn.textContent = '查询中…';
+
+      fetch('/api/words', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ word: raw })
+      })
+        .then(function (r) {
+          return r.json().then(function (data) {
+            if (!r.ok) { toast(data.error || '添加失败', 'error'); return; }
+            words.push(data);
+            addInp.value = '';
+            renderAll();
+            toast('已生成「' + (data.word || raw) + '」');
+          });
+        })
+        .catch(function () { toast('请求失败，请检查网络或 API Key', 'error'); })
+        .finally(function () {
+          addBtn.disabled = false;
+          addBtn.textContent = '生成卡片';
+        });
+    }
+
+    addBtn.addEventListener('click', addWord);
+    addInp.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') addWord();
+    });
+
+    /* ================================================================== */
+    /*  搜索                                                                */
+    /* ================================================================== */
+    searchInp.addEventListener('input', function () {
+      search = searchInp.value.trim().toLowerCase();
+      renderCardGrid();
+    });
+
+    /* ================================================================== */
+    /*  模态框操作                                                           */
+    /* ================================================================== */
+    function openModal(idx) {
+      modalIndex = idx;
+      updateModalContent();
+      wordModal.style.display = 'flex';
+      wordModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      modalBody.style.animation = 'none';
+      modalBody.offsetHeight; // reflow
+      modalBody.style.animation = 'modalIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+    }
+
+    function closeModal() {
+      modalBody.style.animation = 'modalOut 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+      setTimeout(function() {
+        wordModal.style.display = 'none';
+        wordModal.classList.add('hidden');
+        modalIndex = -1;
+        document.body.style.overflow = '';
+      }, 190);
+    }
+
+    function updateModalContent() {
+      if (modalIndex < 0 || modalIndex >= words.length) return;
+      var w = words[modalIndex];
+      var stage = w.mastery_stage || 0;
+      var nextStage = stage >= 3 ? 0 : stage + 1;
+
+      modalWord.textContent = w.word || '';
+      modalPhonetic.textContent = w.phonetic || '';
+      modalDefinition.textContent = w.definition || '';
+      modalSentence.innerHTML = (w.sentence ? '&ldquo;' + esc(w.sentence) + '&rdquo;' : '暂无例句');
+      modalTranslation.textContent = w.translation || '';
+      modalStageLabel.textContent = '当前状态：' + STAGE_LABELS[stage];
+
+      var promoteClass = PROMOTE_CLASSES[stage];
+      modalPromoteBtn.className = 'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20 ' + promoteClass;
+      modalPromoteText.textContent = stage >= 3 ? '重新学习' : '晋升为「' + STAGE_LABELS[nextStage] + '」';
+      modalPromoteBtn.onclick = function() { promoteStage(modalIndex); };
+    }
+
+    // 关闭事件
+    modalClose.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', closeModal);
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modalIndex >= 0) closeModal();
+    });
+
+    /* ================================================================== */
+    /*  移动端侧栏切换                                                       */
+    /* ================================================================== */
+    var mobilePosToggle = document.getElementById('mobilePosToggle');
+    var mobileStatsToggle = document.getElementById('mobileStatsToggle');
+
+    mobilePosToggle.addEventListener('click', function() {
+      leftSidebar.classList.toggle('hidden');
+      if (!leftSidebar.classList.contains('hidden')) {
+        leftSidebar.style.position = 'fixed';
+        leftSidebar.style.top = '57px';
+        leftSidebar.style.left = '0';
+        leftSidebar.style.zIndex = '30';
+        leftSidebar.style.width = '240px';
+        leftSidebar.style.maxHeight = 'calc(100vh - 57px)';
+        leftSidebar.style.overflowY = 'auto';
+        leftSidebar.style.background = 'white';
+        leftSidebar.style.boxShadow = '0 10px 40px rgba(0,0,0,0.12)';
+        leftSidebar.classList.add('lg:hidden');
+      }
+    });
+
+    mobileStatsToggle.addEventListener('click', function() {
+      mobileStatsPanel.classList.toggle('hidden');
+    });
+
+    // 点击外部关闭移动端侧栏
+    document.addEventListener('click', function(e) {
+      if (!leftSidebar.classList.contains('hidden') &&
+          !leftSidebar.contains(e.target) &&
+          e.target !== mobilePosToggle &&
+          !mobilePosToggle.contains(e.target)) {
+        leftSidebar.classList.add('hidden');
+        leftSidebar.style.position = '';
+        leftSidebar.style.top = '';
+        leftSidebar.style.left = '';
+        leftSidebar.style.zIndex = '';
+        leftSidebar.style.width = '';
+        leftSidebar.style.maxHeight = '';
+        leftSidebar.style.overflowY = '';
+        leftSidebar.style.background = '';
+        leftSidebar.style.boxShadow = '';
+      }
+    });
+
+    /* ================================================================== */
+    /*  全局渲染                                                            */
+    /* ================================================================== */
+    function renderAll() {
+      renderPosSidebar();
+      renderMemoryPanel();
+      renderActiveFilters();
+      renderCardGrid();
+    }
+
+    /* ================================================================== */
+    /*  启动                                                                */
+    /* ================================================================== */
+    loadWords();
+  })();
+  </script>
+</body>
+</html>

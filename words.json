@@ -1,0 +1,180 @@
+{
+  "words": [
+    {
+      "word": "paradigm",
+      "phonetic": "/ˈpærədaɪm/",
+      "definition": "n. 范例，范式，典范",
+      "sentence": "The discovery of quantum mechanics marked a paradigm shift in modern physics.",
+      "translation": "量子力学的发现标志着现代物理学中的范式转变。",
+      "mastery_stage": 1
+    },
+    {
+      "word": "empirical",
+      "phonetic": "/ɪmˈpɪrɪkəl/",
+      "definition": "adj. 经验主义的，以观察为依据的",
+      "sentence": "The researcher insisted that all conclusions must be grounded in empirical evidence rather than speculation.",
+      "translation": "研究者坚持所有结论必须建立在经验证据之上，而非推测。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "ambiguous",
+      "phonetic": "/æmˈbɪɡjuəs/",
+      "definition": "adj. 模棱两可的，含糊的",
+      "sentence": "The contract contained several ambiguous clauses that led to prolonged litigation.",
+      "translation": "该合同包含若干模棱两可的条款，导致了旷日持久的诉讼。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "articulate",
+      "phonetic": "/ɑːrˈtɪkjuleɪt/",
+      "definition": "v. 清晰表达；adj. 善于表达的",
+      "sentence": "She is remarkably articulate when explaining complex philosophical concepts to undergraduates.",
+      "translation": "她在向本科生解释复杂的哲学概念时表现得异常清晰。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "delineate",
+      "phonetic": "/dɪˈlɪnieɪt/",
+      "definition": "v. 描绘，勾勒，精确描述",
+      "sentence": "The report meticulously delineates the boundaries between public and private responsibilities.",
+      "translation": "这份报告细致地描绘了公共责任与私人责任之间的界限。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "elucidate",
+      "phonetic": "/ɪˈluːsɪdeɪt/",
+      "definition": "v. 阐明，解释清楚",
+      "sentence": "The professor used a series of diagrams to elucidate the intricate mechanism of gene regulation.",
+      "translation": "教授用一系列图表来阐明基因调控的复杂机制。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "facilitate",
+      "phonetic": "/fəˈsɪlɪteɪt/",
+      "definition": "v. 促进，推动，使便利",
+      "sentence": "Digital platforms have greatly facilitated cross-border academic collaboration in recent years.",
+      "translation": "近年来，数字平台极大地促进了跨境学术合作。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "gregarious",
+      "phonetic": "/ɡrɪˈɡeriəs/",
+      "definition": "adj. 爱社交的，群居的",
+      "sentence": "Contrary to the stereotype of the solitary scholar, many eminent scientists are highly gregarious.",
+      "translation": "与孤独学者的刻板印象相反，许多杰出科学家都非常热衷社交。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "hypothesis",
+      "phonetic": "/haɪˈpɒθəsɪs/",
+      "definition": "n. 假说，假设",
+      "sentence": "The null hypothesis was rejected after rigorous statistical analysis of the clinical trial data.",
+      "translation": "在对临床试验数据进行严格的统计分析后，零假设被拒绝了。",
+      "mastery_stage": 1
+    },
+    {
+      "word": "immutable",
+      "phonetic": "/ɪˈmjuːtəbəl/",
+      "definition": "adj. 永恒不变的，不可改变的",
+      "sentence": "The philosopher argued that while physical laws are immutable, human perceptions of them evolve constantly.",
+      "translation": "这位哲学家认为，虽然物理法则是永恒不变的，但人类对它们的认知却在不断演进。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "juxtapose",
+      "phonetic": "/ˈdʒʌkstəpəʊz/",
+      "definition": "v. 并列放置，对比",
+      "sentence": "The author juxtaposes the protagonist's idealism with the antagonist's cynicism to highlight the novel's central tension.",
+      "translation": "作者将主人公的理想主义与反角的犬儒主义并列对比，以突出小说的核心张力。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "lucid",
+      "phonetic": "/ˈluːsɪd/",
+      "definition": "adj. 清晰的，透彻的，清醒的",
+      "sentence": "Despite the complexity of the subject, her lecture remained remarkably lucid throughout.",
+      "translation": "尽管主题复杂，她的讲座自始至终都异常清晰透彻。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "metamorphosis",
+      "phonetic": "/ˌmetəˈmɔːrfəsɪs/",
+      "definition": "n. 蜕变，变形，彻底转变",
+      "sentence": "Kafka's novella depicts a surreal metamorphosis that serves as an allegory for modern alienation.",
+      "translation": "卡夫卡的中篇小说描绘了一次超现实的蜕变，以此隐喻现代社会的异化。",
+      "mastery_stage": 1
+    },
+    {
+      "word": "nostalgia",
+      "phonetic": "/nɒˈstældʒə/",
+      "definition": "n. 怀旧，乡愁",
+      "sentence": "The resurgence of vinyl records reflects a collective nostalgia for tangible media in a digital age.",
+      "translation": "黑胶唱片的复兴反映了数字时代人们对实体媒介的集体怀旧。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "obsolete",
+      "phonetic": "/ˈɒbsəliːt/",
+      "definition": "adj. 过时的，废弃的",
+      "sentence": "Technologies that were cutting-edge a decade ago are now rendered obsolete by the relentless pace of innovation.",
+      "translation": "十年前的前沿技术如今已被无情的创新速度所淘汰。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "pragmatic",
+      "phonetic": "/præɡˈmætɪk/",
+      "definition": "adj. 实用主义的，务实的",
+      "sentence": "Faced with budget constraints, the committee adopted a pragmatic approach rather than pursuing an idealistic blueprint.",
+      "translation": "面对预算限制，委员会采取了务实的方法，而非追求理想化的蓝图。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "resilient",
+      "phonetic": "/rɪˈzɪliənt/",
+      "definition": "adj. 有复原力的，坚韧的",
+      "sentence": "Children growing up in adversity often develop remarkably resilient coping mechanisms.",
+      "translation": "在逆境中长大的孩子往往会发展出异常坚韧的应对机制。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "synthesize",
+      "phonetic": "/ˈsɪnθəsaɪz/",
+      "definition": "v. 综合，合成",
+      "sentence": "The ability to synthesize disparate sources of information is a hallmark of critical thinking.",
+      "translation": "综合不同来源信息的能力是批判性思维的标志。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "ubiquitous",
+      "phonetic": "/juːˈbɪkwɪtəs/",
+      "definition": "adj. 无处不在的，普遍的",
+      "sentence": "Smartphones have become so ubiquitous that it is now difficult to imagine daily life without them.",
+      "translation": "智能手机已变得如此普及，如今很难想象没有它们的日常生活。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "vulnerable",
+      "phonetic": "/ˈvʌlnərəbəl/",
+      "definition": "adj. 脆弱的，易受伤害的",
+      "sentence": "Coastal ecosystems are particularly vulnerable to the effects of rising sea temperatures.",
+      "translation": "沿海生态系统对海水升温的影响尤为脆弱。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "collaboration",
+      "phonetic": "/kəˌlæbəˈreɪʃn/",
+      "definition": "n. 合作，协作",
+      "sentence": "The success of the research project depended on close collaboration between the two laboratories.",
+      "translation": "该研究项目的成功依赖于两个实验室之间的密切合作。",
+      "mastery_stage": 0
+    },
+    {
+      "word": "henceforth",
+      "phonetic": "/ˌhensˈfɔːrθ/",
+      "definition": "adv. 从此以后",
+      "sentence": "Henceforth, all research proposals must be submitted to the ethics committee for approval.",
+      "translation": "从此以后，所有研究提案都必须提交给伦理委员会审批。",
+      "mastery_stage": 0
+    }
+  ]
+}

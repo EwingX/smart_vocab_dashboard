@@ -1,3 +1,12 @@
+---
+title: 考研英语智能极简词典
+emoji: 📖
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # 考研英语智能极简词典看板
 
 > Kaoyan Smart Vocab Dashboard — 极简 · AI 驱动 · 渐进熟记

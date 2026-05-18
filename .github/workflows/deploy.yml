@@ -9,12 +9,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Push to HF Space
+      - name: Deploy to HF Space
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git remote add space https://EwingX2979:${HF_TOKEN}@huggingface.co/spaces/EwingX2979/smart-vocab
-          git push space main
+          pip install huggingface_hub
+          python -c "
+          from huggingface_hub import HfApi
+          api = HfApi(token='$HF_TOKEN')
+          api.upload_folder(
+              folder_path='.',
+              repo_id='EwingX2979/smart-vocab',
+              repo_type='space',
+              ignore_patterns=['.git', '.github', '__pycache__', '.env', '.gitignore', 'Procfile', '*.pyc', '.claude']
+          )
+          print('Deploy done!')
+          "

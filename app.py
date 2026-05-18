@@ -7,11 +7,15 @@ from datetime import date, timedelta
 
 import requests
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 
 load_dotenv(override=True)
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "vocab-dashboard-secret-key-2024")
+
+# 登录密码
+SITE_PASSWORD = os.environ.get("SITE_PASSWORD", "cxj200524")
 
 WORDS_FILE = os.path.join(os.environ.get("DATA_DIR", os.path.dirname(os.path.abspath(__file__))), "words.json")
 
@@ -215,6 +219,39 @@ def check_api_connection():
         return False, f"连接 {API_URL} 超时"
     except Exception as e:
         return False, f"未知错误: {e}"
+
+
+# ---------------------------------------------------------------------------
+# 登录认证
+# ---------------------------------------------------------------------------
+
+@app.before_request
+def require_login():
+    """除登录页外，所有请求需验证密码。"""
+    if request.path == "/login" or request.path.startswith("/static"):
+        return None
+    if "logged_in" not in session:
+        if request.path.startswith("/api/"):
+            return jsonify({"error": "未登录"}), 401
+        return redirect(url_for("login_page"))
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login_page():
+    error = ""
+    if request.method == "POST":
+        pwd = request.form.get("password", "")
+        if pwd == SITE_PASSWORD:
+            session["logged_in"] = True
+            return redirect(url_for("index"))
+        error = "密码错误，请重试"
+    return render_template("login.html", error=error)
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("login_page"))
 
 
 # ---------------------------------------------------------------------------

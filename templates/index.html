@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>考研英语智能极简词典</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -12,6 +15,7 @@
         extend: {
           fontFamily: {
             sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', '"PingFang SC"', '"Hiragino Sans GB"', '"Microsoft YaHei"', 'sans-serif'],
+            serif: ['"Playfair Display"', 'Georgia', '"Times New Roman"', 'serif'],
             mono: ['"JetBrains Mono"', '"Fira Code"', 'Consolas', '"SF Mono"', 'monospace'],
           },
         },
@@ -21,8 +25,13 @@
   <style>
     html { scroll-behavior: smooth; }
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* ---- 英文单词使用高级衬线字体 ---- */
+    .word-text {
+      font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
     }
 
     /* ---- 卡片动画 ---- */
@@ -83,12 +92,88 @@
     ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
     .dark ::-webkit-scrollbar-thumb { background: #4b5563; }
 
-    /* ---- 词性筛选按钮 ---- */
-    .pos-chip {
+    /* ---- 极简词性行按钮 ---- */
+    .pos-badge {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.38rem 0.55rem;
+      border-radius: 0.45rem;
+      font-size: 0.73rem;
+      font-weight: 500;
+      cursor: pointer;
       transition: all 0.2s ease;
+      user-select: none;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #64748b;
+      flex-shrink: 0;
     }
-    .pos-chip.active {
-      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    .pos-badge:hover {
+      background: #f1f5f9;
+    }
+    .dark .pos-badge:hover {
+      background: #1e293b;
+    }
+    .pos-badge:active {
+      transform: scale(0.97);
+    }
+
+    /* 词性小圆点 */
+    .pos-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .pos-dot.pos-all   { background: #94a3b8; }  .dark .pos-dot.pos-all   { background: #64748b; }
+    .pos-dot.pos-n     { background: #3b82f6; }  .dark .pos-dot.pos-n     { background: #60a5fa; }
+    .pos-dot.pos-v     { background: #10b981; }  .dark .pos-dot.pos-v     { background: #34d399; }
+    .pos-dot.pos-adj   { background: #f59e0b; }  .dark .pos-dot.pos-adj   { background: #fbbf24; }
+    .pos-dot.pos-adv   { background: #8b5cf6; }  .dark .pos-dot.pos-adv   { background: #a78bfa; }
+    .pos-dot.pos-prep  { background: #f43f5e; }  .dark .pos-dot.pos-prep  { background: #fda4af; }
+    .pos-dot.pos-conj  { background: #14b8a6; }  .dark .pos-dot.pos-conj  { background: #2dd4bf; }
+
+    /* 激活态 */
+    .pos-badge.active {
+      background: #f1f5f9;
+      border-color: #e2e8f0;
+    }
+    .dark .pos-badge.active {
+      background: #1e293b;
+      border-color: #334155;
+    }
+    .pos-badge.active.pos-all   { background: #475569; color: #fff; border-color: #475569; }
+    .dark .pos-badge.active.pos-all   { background: #cbd5e1; color: #0f172a; border-color: #cbd5e1; }
+    .pos-badge.active.pos-n     { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+    .dark .pos-badge.active.pos-n     { background: #60a5fa; color: #0c1929; border-color: #60a5fa; }
+    .pos-badge.active.pos-v     { background: #10b981; color: #fff; border-color: #10b981; }
+    .dark .pos-badge.active.pos-v     { background: #34d399; color: #022c22; border-color: #34d399; }
+    .pos-badge.active.pos-adj   { background: #f59e0b; color: #fff; border-color: #f59e0b; }
+    .dark .pos-badge.active.pos-adj   { background: #fbbf24; color: #451a03; border-color: #fbbf24; }
+    .pos-badge.active.pos-adv   { background: #8b5cf6; color: #fff; border-color: #8b5cf6; }
+    .dark .pos-badge.active.pos-adv   { background: #a78bfa; color: #1e0b4c; border-color: #a78bfa; }
+    .pos-badge.active.pos-prep  { background: #f43f5e; color: #fff; border-color: #f43f5e; }
+    .dark .pos-badge.active.pos-prep  { background: #fda4af; color: #4c0519; border-color: #fda4af; }
+    .pos-badge.active.pos-conj  { background: #14b8a6; color: #fff; border-color: #14b8a6; }
+    .dark .pos-badge.active.pos-conj  { background: #2dd4bf; color: #042f2e; border-color: #2dd4bf; }
+
+    /* ---- 短语区域 ---- */
+    .phrase-chip {
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .phrase-chip:hover {
+      transform: translateY(-1px);
+    }
+    .phrase-chip.active {
+      background: #475569;
+      color: #fff;
+    }
+    .dark .phrase-chip.active {
+      background: #cbd5e1;
+      color: #0f172a;
     }
   </style>
 </head>
@@ -106,8 +191,7 @@
         <span id="wordCount" class="text-xs text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full">0 词</span>
       </div>
       <div class="flex items-center gap-2">
-        <!-- 移动端侧栏切换 -->
-        <button id="mobilePosToggle" title="词性筛选"
+        <button id="mobilePosToggle" title="分类筛选"
                 class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-xs text-gray-500">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 4h18M3 8h12M3 12h18M3 16h12M3 20h18"/></svg>
         </button>
@@ -134,34 +218,54 @@
   <!-- ================================================================== -->
   <div class="flex flex-col lg:flex-row">
 
-    <!-- ===== 左侧边栏：词性分类器 (桌面端固定竖排 / 移动端可折叠横排) ===== -->
+    <!-- ===== 左侧边栏：词性分类 + 短语汇总 (桌面端固定 / 移动端折叠) ===== -->
     <aside id="leftSidebar" class="
-      lg:block lg:w-56 lg:sticky lg:top-[57px] lg:max-h-[calc(100vh-57px)] lg:overflow-y-auto lg:border-r lg:border-gray-200/70 dark:lg:border-gray-800/70 lg:bg-white/50 dark:lg:bg-[#0f0f13]/50
+      lg:block lg:w-40 lg:flex-shrink-0 lg:sticky lg:top-[57px] lg:max-h-[calc(100vh-57px)] lg:overflow-y-auto lg:border-r lg:border-gray-200/70 dark:lg:border-gray-800/70 lg:bg-white/50 dark:lg:bg-[#0f0f13]/50
       hidden
     ">
-      <div class="p-4">
-        <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">词性分类</p>
-        <nav id="posNav" class="space-y-1">
-          <!-- JS 动态填充 -->
-        </nav>
+      <div class="p-3 space-y-4">
+
+        <!-- 板块一：词性分类 (Parts of Speech) -->
+        <section>
+          <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Parts of Speech</p>
+          <div id="posBadgeGrid" class="flex flex-col gap-1">
+            <!-- JS 动态填充圆形徽章 -->
+          </div>
+        </section>
+
+        <!-- 板块二：短语汇总 (Phrases) -->
+        <section>
+          <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Phrases</p>
+          <button id="phraseFilterBtn" class="phrase-chip w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors
+            text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800">
+            <span class="flex items-center justify-between">
+              <span class="flex items-center gap-2">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+                <span>Phrases</span>
+              </span>
+              <span id="phraseCount" class="text-xs opacity-60">0</span>
+            </span>
+          </button>
+        </section>
+
       </div>
     </aside>
 
     <!-- ===== 中部主区域 ===== -->
-    <main class="flex-1 min-w-0 px-5 py-6">
+    <main class="flex-1 min-w-0 px-5 lg:px-8 py-6 overflow-x-hidden">
 
       <!-- 搜索 + 添加单词 -->
       <div class="mb-6 space-y-3">
-        <div class="flex flex-col sm:flex-row gap-3">
-          <div class="relative flex-1">
+        <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+          <div class="relative flex-1 min-w-[200px]">
             <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 dark:text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
             </svg>
             <input id="searchInput" type="text" placeholder="搜索单词或释义…"
                    class="w-full pl-11 pr-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400/30 transition-all">
           </div>
-          <div class="flex gap-2 sm:w-72">
-            <input id="addWordInput" type="text" placeholder="输入新单词…"
+          <div class="flex gap-2 flex-1 min-w-[260px] max-w-[320px]">
+            <input id="addWordInput" type="text" placeholder="输入单词或短语…"
                    class="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-sm outline-none focus:border-indigo-400 dark:focus:border-indigo-500 focus:ring-1 focus:ring-indigo-400/30 transition-all"
                    autocomplete="off">
             <button id="addWordBtn"
@@ -176,7 +280,7 @@
       </div>
 
       <!-- 卡片网格 -->
-      <div id="cardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+      <div id="cardGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4 lg:gap-5">
       </div>
 
       <!-- 空状态 -->
@@ -193,20 +297,20 @@
 
     <!-- ===== 右侧边栏：记忆曲线追踪面板 ===== -->
     <aside id="rightSidebar" class="
-      lg:block lg:w-60 lg:sticky lg:top-[57px] lg:max-h-[calc(100vh-57px)] lg:overflow-y-auto lg:border-l lg:border-gray-200/70 dark:lg:border-gray-800/70 lg:bg-white/50 dark:lg:bg-[#0f0f13]/50
+      lg:block lg:w-44 lg:flex-shrink-0 lg:sticky lg:top-[57px] lg:max-h-[calc(100vh-57px)] lg:overflow-y-auto lg:border-l lg:border-gray-200/70 dark:lg:border-gray-800/70 lg:bg-white/50 dark:lg:bg-[#0f0f13]/50
       hidden
     ">
-      <div class="p-4">
+      <div class="p-3">
         <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">记忆追踪</p>
-        <div id="memoryStats" class="space-y-1.5">
+        <div id="memoryStats" class="space-y-1">
           <!-- JS 动态填充 -->
         </div>
         <div class="mt-5 pt-4 border-t border-gray-100 dark:border-gray-800">
-          <div class="text-xs text-gray-400 dark:text-gray-500 mb-1">掌握进度</div>
+          <div class="text-xs text-gray-400 dark:text-gray-500 mb-1.5">掌握进度</div>
           <div class="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
             <div id="masteryBar" class="h-full bg-indigo-500 rounded-full transition-all duration-500" style="width: 0%"></div>
           </div>
-          <div id="masteryPercent" class="text-xs text-gray-400 dark:text-gray-500 mt-1">0%</div>
+          <div id="masteryPercent" class="text-xs text-gray-400 dark:text-gray-500 mt-1.5">0%</div>
         </div>
       </div>
     </aside>
@@ -235,11 +339,23 @@
 
       <!-- 弹窗内容 -->
       <div class="p-8 lg:p-10">
-        <!-- 英文单词 -->
-        <h2 id="modalWord" class="text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 mb-2"></h2>
+        <!-- 英文单词 (Playfair Display 衬线体) + 充实按钮 -->
+        <div class="flex items-center gap-2 mb-2">
+          <h2 id="modalWord" class="word-text text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100"></h2>
+          <button id="modalEnrichBtn"
+                  class="shrink-0 w-8 h-8 flex items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  title="调用 AI 充实变形和短语">
+            <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </button>
+        </div>
 
         <!-- 音标 -->
-        <p id="modalPhonetic" class="text-lg text-gray-400 dark:text-gray-500 font-mono mb-8"></p>
+        <p id="modalPhonetic" class="text-lg text-gray-400 dark:text-gray-500 font-mono mb-2"></p>
+
+        <!-- 类型标签 -->
+        <p id="modalTypeTag" class="text-xs text-gray-400 dark:text-gray-500 mb-6"></p>
 
         <!-- 分割线 -->
         <div class="w-12 h-px bg-gray-200 dark:bg-gray-700 mb-8"></div>
@@ -248,6 +364,18 @@
         <div class="mb-10">
           <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">释义</h3>
           <p id="modalDefinition" class="text-xl lg:text-2xl text-gray-800 dark:text-gray-200 leading-relaxed"></p>
+        </div>
+
+        <!-- 常见变形 -->
+        <div id="modalVariationsWrap" class="mb-6 hidden">
+          <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">常见变形</h3>
+          <div id="modalVariations" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- 常见短语 -->
+        <div id="modalPhrasesWrap" class="mb-6 hidden">
+          <h3 class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">常见短语</h3>
+          <div id="modalPhrases" class="space-y-2"></div>
         </div>
 
         <!-- 例句区 -->
@@ -262,17 +390,30 @@
           <p id="modalTranslation" class="text-lg text-gray-600 dark:text-gray-400 leading-relaxed"></p>
         </div>
 
-        <!-- 底栏：熟记状态 + 晋升按钮 -->
+        <!-- 底栏：键盘提示 + 熟记状态 + 晋升/退回按钮 -->
         <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-800">
-          <span id="modalStageLabel" class="text-sm text-gray-500 dark:text-gray-400"></span>
-          <button id="modalPromoteBtn"
-                  class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95"
-                  title="晋升熟记阶段">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-            </svg>
-            <span id="modalPromoteText">晋升</span>
-          </button>
+          <div class="flex items-center gap-3">
+            <span id="modalStageLabel" class="text-sm text-gray-500 dark:text-gray-400"></span>
+            <span class="text-xs text-gray-300 dark:text-gray-600 hidden sm:inline">← → 调整阶段</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="modalDemoteBtn"
+                    class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20"
+                    title="退回上一级">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M11 7l-5 5m0 0l5 5m-5-5h12"/>
+              </svg>
+              <span id="modalDemoteText">退回</span>
+            </button>
+            <button id="modalPromoteBtn"
+                    class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95"
+                    title="晋升熟记阶段">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+              </svg>
+              <span id="modalPromoteText">晋升</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -289,6 +430,7 @@
     var words        = [];
     var posFilter    = 'all';     // 词性过滤
     var stageFilter  = 'all';     // 熟记阶段过滤: 'all' | '0' | '1' | '2' | '3'
+    var typeFilter   = 'all';     // 类型过滤: 'all' | 'phrase'
     var search       = '';
     var modalIndex   = -1;        // 当前弹窗展示的单词索引
 
@@ -311,17 +453,23 @@
       'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-400'
     ];
 
+    // 退回按钮色彩 (hover 指向前一级)
+    var DEMOTE_CLASSES = [
+      'hidden',
+      'bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-600 dark:hover:text-slate-400',
+      'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 hover:bg-amber-50 dark:hover:bg-amber-900/30 hover:text-amber-700 dark:hover:text-amber-400',
+      'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 hover:text-emerald-700 dark:hover:text-emerald-400'
+    ];
+
+    // 词性定义（仅保留核心六种 + all）
     var POS_DEFS = [
-      { key: 'n',    label: '名词 (n.)' },
-      { key: 'v',    label: '动词 (v.)' },
-      { key: 'adj',  label: '形容词 (adj.)' },
-      { key: 'adv',  label: '副词 (adv.)' },
-      { key: 'prep', label: '介词 (prep.)' },
-      { key: 'conj', label: '连词 (conj.)' },
-      { key: 'pron', label: '代词 (pron.)' },
-      { key: 'art',  label: '冠词 (art.)' },
-      { key: 'num',  label: '数词 (num.)' },
-      { key: 'int',  label: '感叹词 (int.)' },
+      { key: 'all',  label: 'all',   cssClass: 'pos-all'  },
+      { key: 'n',    label: 'n.',    cssClass: 'pos-n'    },
+      { key: 'v',    label: 'v.',    cssClass: 'pos-v'    },
+      { key: 'adj',  label: 'adj.',  cssClass: 'pos-adj'  },
+      { key: 'adv',  label: 'adv.',  cssClass: 'pos-adv'  },
+      { key: 'prep', label: 'prep.', cssClass: 'pos-prep' },
+      { key: 'conj', label: 'conj.', cssClass: 'pos-conj' },
     ];
 
     /* ================================================================== */
@@ -336,7 +484,9 @@
     var toggleBtn       = document.getElementById('themeToggle');
     var iconSun         = document.getElementById('iconSun');
     var iconMoon        = document.getElementById('iconMoon');
-    var posNav          = document.getElementById('posNav');
+    var posBadgeGrid    = document.getElementById('posBadgeGrid');
+    var phraseFilterBtn = document.getElementById('phraseFilterBtn');
+    var phraseCount     = document.getElementById('phraseCount');
     var memoryStats     = document.getElementById('memoryStats');
     var masteryBar      = document.getElementById('masteryBar');
     var masteryPercent  = document.getElementById('masteryPercent');
@@ -346,18 +496,26 @@
     var rightSidebar    = document.getElementById('rightSidebar');
 
     // 模态框
-    var wordModal       = document.getElementById('wordModal');
-    var modalOverlay    = document.getElementById('modalOverlay');
-    var modalClose      = document.getElementById('modalClose');
-    var modalBody       = document.getElementById('modalBody');
-    var modalWord       = document.getElementById('modalWord');
-    var modalPhonetic   = document.getElementById('modalPhonetic');
-    var modalDefinition = document.getElementById('modalDefinition');
-    var modalSentence   = document.getElementById('modalSentence');
+    var wordModal        = document.getElementById('wordModal');
+    var modalOverlay     = document.getElementById('modalOverlay');
+    var modalClose       = document.getElementById('modalClose');
+    var modalBody        = document.getElementById('modalBody');
+    var modalWord        = document.getElementById('modalWord');
+    var modalPhonetic    = document.getElementById('modalPhonetic');
+    var modalTypeTag     = document.getElementById('modalTypeTag');
+    var modalDefinition  = document.getElementById('modalDefinition');
+    var modalSentence    = document.getElementById('modalSentence');
     var modalTranslation = document.getElementById('modalTranslation');
-    var modalStageLabel = document.getElementById('modalStageLabel');
-    var modalPromoteBtn = document.getElementById('modalPromoteBtn');
+    var modalStageLabel  = document.getElementById('modalStageLabel');
+    var modalPromoteBtn  = document.getElementById('modalPromoteBtn');
     var modalPromoteText = document.getElementById('modalPromoteText');
+    var modalDemoteBtn   = document.getElementById('modalDemoteBtn');
+    var modalDemoteText  = document.getElementById('modalDemoteText');
+    var modalEnrichBtn   = document.getElementById('modalEnrichBtn');
+    var modalVariationsWrap = document.getElementById('modalVariationsWrap');
+    var modalVariations  = document.getElementById('modalVariations');
+    var modalPhrasesWrap = document.getElementById('modalPhrasesWrap');
+    var modalPhrases     = document.getElementById('modalPhrases');
 
     /* ================================================================== */
     /*  Toast                                                              */
@@ -420,11 +578,15 @@
         })
         .then(function (data) {
           words = data;
-          // 确保前端兼容：若后端未迁移则前端兜底
           words.forEach(function(w) {
             if (typeof w.mastery_stage === 'undefined') {
               w.mastery_stage = (w.status === '已熟记') ? 1 : 0;
             }
+            if (typeof w.type === 'undefined') {
+              w.type = (w.word || '').indexOf(' ') !== -1 ? 'phrase' : 'word';
+            }
+            if (!Array.isArray(w.variations)) w.variations = [];
+            if (!Array.isArray(w.phrases)) w.phrases = [];
           });
           renderAll();
         })
@@ -439,6 +601,9 @@
     function filteredWords() {
       return words.filter(function (w, i) {
         w._index = i;
+
+        // 类型过滤 (phrase / word)
+        if (typeFilter === 'phrase' && (w.type || 'word') !== 'phrase') return false;
 
         // 词性过滤
         if (posFilter !== 'all') {
@@ -465,9 +630,9 @@
     }
 
     /* ================================================================== */
-    /*  渲染左侧词性侧栏                                                     */
+    /*  渲染左侧边栏（词性徽章 + 短语筛选）                                    */
     /* ================================================================== */
-    function renderPosSidebar() {
+    function renderLeftSidebar() {
       // 统计各词性的单词数量
       var counts = {};
       POS_DEFS.forEach(function(p) { counts[p.key] = 0; });
@@ -484,45 +649,46 @@
         });
       });
 
-      var html = '';
-
-      // "全部" 按钮
-      html += '<button class="pos-chip w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ' +
-        (posFilter === 'all'
-          ? 'active bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
-          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800') +
-        '" data-pos="all">' +
-        '<span class="flex items-center justify-between">' +
-          '<span>全部</span>' +
-          '<span class="text-xs opacity-60">' + words.length + '</span>' +
-        '</span>' +
-      '</button>';
-
-      // 各词性按钮
+      // 渲染词性行按钮
+      var badgeHtml = '';
       POS_DEFS.forEach(function(p) {
-        if (counts[p.key] === 0 && posFilter !== p.key) return; // 没有该词性单词时不显示（正在过滤时除外）
-        html += '<button class="pos-chip w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ' +
-          (posFilter === p.key
-            ? 'active bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
-            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800') +
-          '" data-pos="' + p.key + '">' +
-          '<span class="flex items-center justify-between">' +
-            '<span>' + p.label + '</span>' +
-            '<span class="text-xs opacity-60">' + (counts[p.key] || 0) + '</span>' +
-          '</span>' +
+        var isActive = posFilter === p.key;
+        var count = p.key === 'all' ? words.length : (counts[p.key] || 0);
+        badgeHtml += '<button class="pos-badge ' + p.cssClass + (isActive ? ' active' : '') +
+          '" data-pos="' + p.key + '" title="' + p.label + ' (' + count + ')">' +
+          '<span class="pos-dot ' + p.cssClass + '"></span>' +
+          '<span class="flex-1 text-left">' + p.label + '</span>' +
+          '<span class="text-xs opacity-50">' + count + '</span>' +
         '</button>';
       });
+      posBadgeGrid.innerHTML = badgeHtml;
 
-      posNav.innerHTML = html;
-
-      // 绑定点击事件
-      posNav.querySelectorAll('.pos-chip').forEach(function(chip) {
-        chip.addEventListener('click', function() {
-          posFilter = chip.dataset.pos;
+      // 绑定词性徽章点击事件
+      posBadgeGrid.querySelectorAll('.pos-badge').forEach(function(badge) {
+        badge.addEventListener('click', function() {
+          posFilter = badge.dataset.pos;
           renderAll();
         });
       });
+
+      // 统计短语数量
+      var phraseTotal = words.filter(function(w) { return (w.type || 'word') === 'phrase'; }).length;
+      phraseCount.textContent = phraseTotal;
+
+      // 短语按钮状态
+      phraseFilterBtn.classList.toggle('active', typeFilter === 'phrase');
+      if (typeFilter === 'phrase') {
+        phraseFilterBtn.classList.add('bg-gray-900', 'dark:bg-gray-100', 'text-white', 'dark:text-gray-900');
+      } else {
+        phraseFilterBtn.classList.remove('bg-gray-900', 'dark:bg-gray-100', 'text-white', 'dark:text-gray-900');
+      }
     }
+
+    // 短语筛选按钮点击
+    phraseFilterBtn.addEventListener('click', function() {
+      typeFilter = (typeFilter === 'phrase') ? 'all' : 'phrase';
+      renderAll();
+    });
 
     /* ================================================================== */
     /*  渲染右侧记忆追踪面板                                                  */
@@ -535,7 +701,6 @@
       });
 
       var total = words.length;
-      var mastered = counts[1] + counts[2] + counts[3];
       var pct = total > 0 ? Math.round((counts[3] / total) * 100) : 0;
 
       // 进度条
@@ -558,17 +723,17 @@
       var html = '';
       stageKeys.forEach(function(s) {
         var isActive = stageFilter === s.key;
-        html += '<button class="w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ' +
+        html += '<button class="w-full text-left px-2.5 py-1.5 rounded-lg text-xs transition-colors ' +
           (isActive
             ? 'bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900'
             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800') +
           '" data-stage="' + s.key + '">' +
           '<span class="flex items-center justify-between">' +
-            '<span class="flex items-center gap-2">' +
-              '<span class="w-2 h-2 rounded-full ' + s.color + '"></span>' +
+            '<span class="flex items-center gap-1.5">' +
+              '<span class="w-2 h-2 rounded-full flex-shrink-0 ' + s.color + '"></span>' +
               '<span>' + s.label + '</span>' +
             '</span>' +
-            '<span class="text-xs ' + (isActive ? 'opacity-80' : 'opacity-50') + '">' + s.count + '</span>' +
+            '<span class="tabular-nums text-xs ' + (isActive ? 'opacity-80' : 'opacity-50') + '">' + s.count + '</span>' +
           '</span>' +
         '</button>';
       });
@@ -612,6 +777,9 @@
     /* ================================================================== */
     function renderActiveFilters() {
       var chips = [];
+      if (typeFilter === 'phrase') {
+        chips.push({ label: 'Phrases', clear: function() { typeFilter = 'all'; renderAll(); } });
+      }
       if (posFilter !== 'all') {
         var found = POS_DEFS.find(function(p) { return p.key === posFilter; });
         chips.push({ label: found ? found.label : posFilter, clear: function() { posFilter = 'all'; renderAll(); } });
@@ -641,6 +809,7 @@
         clearAll.addEventListener('click', function() {
           posFilter = 'all';
           stageFilter = 'all';
+          typeFilter = 'all';
           renderAll();
         });
       }
@@ -677,6 +846,7 @@
         var stageLabel = STAGE_LABELS[stage];
         var nextStage = stage >= 3 ? 0 : stage + 1;
         var promoteTitle = stage >= 3 ? '重置为未掌握' : '晋升为「' + STAGE_LABELS[nextStage] + '」';
+        var isPhrase = (w.type || 'word') === 'phrase';
 
         var card = document.createElement('div');
         card.className = 'group relative rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#14141b] hover:shadow-lg hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 cursor-pointer';
@@ -684,11 +854,17 @@
         card.style.animationDelay = (n * 0.03) + 's';
         card.dataset.index = idx;
 
+        // 禁用右键菜单
+        card.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+
         card.innerHTML =
           '<div class="p-4 flex flex-col h-[200px]">' +
-            /* 顶行：单词 + 徽章 */
+            /* 顶行：单词 + 类型标签 + 徽章 */
             '<div class="flex items-start justify-between gap-2 mb-1">' +
-              '<h3 class="text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100 truncate flex-1">' + esc(w.word) + '</h3>' +
+              '<div class="flex items-center gap-2 min-w-0 flex-1">' +
+                '<h3 class="word-text text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100 truncate flex-1 min-w-0">' + esc(w.word) + '</h3>' +
+                (isPhrase ? '<span class="shrink-0 text-[10px] text-gray-400 dark:text-gray-500 bg-gray-50 dark:bg-gray-800 px-1.5 py-0.5 rounded">PHR</span>' : '') +
+              '</div>' +
               '<span class="status-badge shrink-0 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium border ' + badgeClass + '">' +
                 stageLabel +
               '</span>' +
@@ -697,23 +873,31 @@
             '<p class="text-xs text-gray-400 dark:text-gray-500 font-mono mb-2 truncate">' + esc(w.phonetic || '') + '</p>' +
             /* 释义 */
             '<p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed flex-1 overflow-hidden">' + esc(w.definition || '') + '</p>' +
-            /* 底栏：例句预览 + 晋升按钮 */
+            /* 底栏：例句预览 + 退回/晋升按钮 */
             '<div class="flex items-end justify-between mt-3 pt-3 border-t border-gray-50 dark:border-gray-800">' +
-              '<span class="text-xs text-gray-300 dark:text-gray-600 truncate max-w-[75%]">' +
+              '<span class="text-xs text-gray-300 dark:text-gray-600 truncate max-w-[60%]">' +
                 (w.sentence ? esc(w.sentence).substring(0, 28) + '…' : '暂无例句') +
               '</span>' +
-              '<button class="promote-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-lg border transition-all ' + promoteClass + ' border-current/20" ' +
-                'title="' + promoteTitle + '" data-idx="' + idx + '">' +
-                '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
-                  '<path d="M13 7l5 5m0 0l-5 5m5-5H6"/>' +
-                '</svg>' +
-              '</button>' +
+              '<span class="flex items-center gap-1 shrink-0">' +
+                '<button class="demote-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-lg border transition-all ' + DEMOTE_CLASSES[stage] + ' border-current/20" ' +
+                  'title="退回上一级" data-idx="' + idx + '">' +
+                  '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+                    '<path d="M11 7l-5 5m0 0l5 5m-5-5h12"/>' +
+                  '</svg>' +
+                '</button>' +
+                '<button class="promote-btn shrink-0 w-7 h-7 flex items-center justify-center rounded-lg border transition-all ' + promoteClass + ' border-current/20" ' +
+                  'title="' + promoteTitle + '" data-idx="' + idx + '">' +
+                  '<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">' +
+                    '<path d="M13 7l5 5m0 0l-5 5m5-5H6"/>' +
+                  '</svg>' +
+                '</button>' +
+              '</span>' +
             '</div>' +
           '</div>';
 
         // 点击卡片 → 打开弹窗
         card.addEventListener('click', function(e) {
-          if (e.target.closest('.promote-btn')) return;
+          if (e.target.closest('.promote-btn') || e.target.closest('.demote-btn')) return;
           openModal(idx);
         });
 
@@ -727,10 +911,18 @@
           promoteStage(parseInt(btn.dataset.idx));
         });
       });
+
+      // 绑定卡片上的退回按钮
+      grid.querySelectorAll('.demote-btn').forEach(function(btn) {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          adjustStage(parseInt(btn.dataset.idx), -1);
+        });
+      });
     }
 
     /* ================================================================== */
-    /*  晋升熟记阶段                                                         */
+    /*  晋升熟记阶段 (循环: 0→1→2→3→0)                                       */
     /* ================================================================== */
     function promoteStage(idx) {
       var w = words[idx];
@@ -748,6 +940,60 @@
           renderAll();
           if (modalIndex === idx) updateModalContent();
           toast('「' + w.word + '」→ ' + STAGE_LABELS[newStage]);
+        })
+        .catch(function () { toast('状态更新失败', 'error'); });
+    }
+
+    /* ================================================================== */
+    /*  充实卡片 (重新调用 AI 补充变形 & 短语)                                   */
+    /* ================================================================== */
+    function enrichWord(idx) {
+      var w = words[idx];
+      modalEnrichBtn.disabled = true;
+      var origHTML = modalEnrichBtn.innerHTML;
+      modalEnrichBtn.innerHTML = '<svg class="w-4 h-4 animate-spin text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="4" class="opacity-25"/><path d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" fill="currentColor" class="opacity-75"/></svg>';
+
+      fetch('/api/words/' + idx + '/enrich', { method: 'POST' })
+        .then(function(r) { return r.json().then(function(d) { if (!r.ok) throw new Error(d.error || '充实失败'); return d; }); })
+        .then(function(data) {
+          // Merge enriched data back
+          ['word','phonetic','definition','sentence','translation','variations','phrases'].forEach(function(k) {
+            if (k in data) words[idx][k] = data[k];
+          });
+          renderAll();
+          if (modalIndex === idx) updateModalContent();
+          toast('「' + w.word + '」已充实变形和短语');
+        })
+        .catch(function(err) { toast(err.message, 'error'); })
+        .finally(function() {
+          modalEnrichBtn.disabled = false;
+          modalEnrichBtn.innerHTML = origHTML;
+        });
+    }
+
+    /* ================================================================== */
+    /*  方向键调整熟记阶段 (有界: 0↔3, 不循环)                                 */
+    /* ================================================================== */
+    function adjustStage(idx, delta) {
+      var w = words[idx];
+      var oldStage = w.mastery_stage || 0;
+      var newStage = oldStage + delta;
+      if (newStage < 0) newStage = 0;
+      if (newStage > 3) newStage = 3;
+      if (newStage === oldStage) return;
+
+      fetch('/api/words/' + idx, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mastery_stage: newStage })
+      })
+        .then(function (r) { return r.json(); })
+        .then(function () {
+          words[idx].mastery_stage = newStage;
+          renderAll();
+          if (modalIndex === idx) updateModalContent();
+          var dir = delta > 0 ? '⬆' : '⬇';
+          toast(dir + ' 「' + w.word + '」→ ' + STAGE_LABELS[newStage]);
         })
         .catch(function () { toast('状态更新失败', 'error'); });
     }
@@ -777,7 +1023,7 @@
     /* ================================================================== */
     function addWord() {
       var raw = addInp.value.trim();
-      if (!raw) { toast('请输入一个英文单词', 'error'); return; }
+      if (!raw) { toast('请输入一个英文单词或短语', 'error'); return; }
 
       addBtn.disabled = true;
       addBtn.textContent = '查询中…';
@@ -793,7 +1039,8 @@
             words.push(data);
             addInp.value = '';
             renderAll();
-            toast('已生成「' + (data.word || raw) + '」');
+            var label = (data.type === 'phrase') ? '短语' : '单词';
+            toast('已生成' + label + '「' + (data.word || raw) + '」');
           });
         })
         .catch(function () { toast('请求失败，请检查网络或 API Key', 'error'); })
@@ -845,25 +1092,89 @@
       var w = words[modalIndex];
       var stage = w.mastery_stage || 0;
       var nextStage = stage >= 3 ? 0 : stage + 1;
+      var prevStage = stage - 1;
+      var isPhrase = (w.type || 'word') === 'phrase';
 
       modalWord.textContent = w.word || '';
       modalPhonetic.textContent = w.phonetic || '';
+      modalTypeTag.textContent = isPhrase ? '📋 Phrase' : '📖 Word';
       modalDefinition.textContent = w.definition || '';
       modalSentence.innerHTML = (w.sentence ? '&ldquo;' + esc(w.sentence) + '&rdquo;' : '暂无例句');
       modalTranslation.textContent = w.translation || '';
       modalStageLabel.textContent = '当前状态：' + STAGE_LABELS[stage];
 
+      // 充实按钮
+      modalEnrichBtn.onclick = function() { enrichWord(modalIndex); };
+
+      // 常见变形
+      var variations = w.variations || [];
+      if (variations.length > 0) {
+        modalVariationsWrap.classList.remove('hidden');
+        var varHtml = '';
+        variations.forEach(function(v) {
+          varHtml += '<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">' +
+            '<span class="word-text font-semibold text-gray-900 dark:text-gray-100">' + esc(v.form) + '</span>' +
+            '<span class="text-xs text-gray-400 dark:text-gray-500">' + esc(v.pos || '') + '</span>' +
+            '<span class="text-xs text-gray-500 dark:text-gray-400">' + esc(v.meaning || '') + '</span>' +
+          '</span>';
+        });
+        modalVariations.innerHTML = varHtml;
+      } else {
+        modalVariationsWrap.classList.add('hidden');
+      }
+
+      // 常见短语
+      var phrases = w.phrases || [];
+      if (phrases.length > 0) {
+        modalPhrasesWrap.classList.remove('hidden');
+        var phrHtml = '';
+        phrases.forEach(function(p) {
+          phrHtml += '<div class="flex items-baseline gap-3 text-sm">' +
+            '<span class="word-text font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap">' + esc(p.phrase) + '</span>' +
+            '<span class="text-gray-400 dark:text-gray-500">' + esc(p.meaning || '') + '</span>' +
+          '</div>';
+        });
+        modalPhrases.innerHTML = phrHtml;
+      } else {
+        modalPhrasesWrap.classList.add('hidden');
+      }
+
+      // 晋升按钮
       var promoteClass = PROMOTE_CLASSES[stage];
       modalPromoteBtn.className = 'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20 ' + promoteClass;
       modalPromoteText.textContent = stage >= 3 ? '重新学习' : '晋升为「' + STAGE_LABELS[nextStage] + '」';
       modalPromoteBtn.onclick = function() { promoteStage(modalIndex); };
+
+      // 退回按钮
+      if (stage <= 0) {
+        modalDemoteBtn.classList.add('hidden');
+      } else {
+        modalDemoteBtn.classList.remove('hidden');
+        var demoteClass = DEMOTE_CLASSES[stage];
+        modalDemoteBtn.className = 'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20 ' + demoteClass;
+        modalDemoteText.textContent = '退回「' + STAGE_LABELS[prevStage] + '」';
+        modalDemoteBtn.onclick = function() { adjustStage(modalIndex, -1); };
+      }
     }
 
     // 关闭事件
     modalClose.addEventListener('click', closeModal);
     modalOverlay.addEventListener('click', closeModal);
+
+    // 键盘事件：Esc 关闭 / 左右方向键调整阶段
     document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape' && modalIndex >= 0) closeModal();
+      if (modalIndex < 0) return; // 弹窗未打开时忽略
+
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeModal();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        adjustStage(modalIndex, 1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        adjustStage(modalIndex, -1);
+      }
     });
 
     /* ================================================================== */
@@ -879,12 +1190,11 @@
         leftSidebar.style.top = '57px';
         leftSidebar.style.left = '0';
         leftSidebar.style.zIndex = '30';
-        leftSidebar.style.width = '240px';
+        leftSidebar.style.width = '180px';
         leftSidebar.style.maxHeight = 'calc(100vh - 57px)';
         leftSidebar.style.overflowY = 'auto';
         leftSidebar.style.background = 'white';
         leftSidebar.style.boxShadow = '0 10px 40px rgba(0,0,0,0.12)';
-        leftSidebar.classList.add('lg:hidden');
       }
     });
 
@@ -915,7 +1225,7 @@
     /*  全局渲染                                                            */
     /* ================================================================== */
     function renderAll() {
-      renderPosSidebar();
+      renderLeftSidebar();
       renderMemoryPanel();
       renderActiveFilters();
       renderCardGrid();

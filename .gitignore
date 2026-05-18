@@ -16,6 +16,10 @@ ENV/
 *.swp
 *.swo
 
+# Environment & secrets
+.env
+*.env
+
 # Claude Code local settings
 .claude/
 

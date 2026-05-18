@@ -13,7 +13,14 @@ load_dotenv(override=True)
 
 app = Flask(__name__)
 
-WORDS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "words.json")
+WORDS_FILE = os.path.join(os.environ.get("DATA_DIR", os.path.dirname(os.path.abspath(__file__))), "words.json")
+
+# 首次部署时，将仓库中的初始数据迁移到持久化目录
+_seed_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "words.json")
+if WORDS_FILE != _seed_file and not os.path.exists(WORDS_FILE):
+    import shutil
+    if os.path.exists(_seed_file):
+        shutil.copy2(_seed_file, WORDS_FILE)
 API_BASE_URL = os.environ.get("ANTHROPIC_BASE_URL", "https://api.deepseek.com").rstrip("/")
 if API_BASE_URL.endswith("/v1"):
     API_URL = f"{API_BASE_URL}/chat/completions"

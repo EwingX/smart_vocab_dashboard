@@ -150,6 +150,138 @@
 
     .import-area { max-height: 0; overflow: hidden; transition: max-height 0.35s ease, margin 0.35s ease; }
     .import-area.open { max-height: 300px; }
+
+    /* ================================================================ */
+    /*  移动端适配 (max-width: 768px)                                     */
+    /* ================================================================ */
+    @media (max-width: 768px) {
+      /* --- 顶部导航栏按钮：扩大触控热区 (44px+) --- */
+      #mobilePosToggle,
+      #mobileStatsToggle,
+      #themeToggle {
+        min-width: 44px;
+        min-height: 44px;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+      }
+      #mobilePosToggle svg,
+      #mobileStatsToggle svg,
+      #themeToggle svg {
+        width: 20px;
+        height: 20px;
+      }
+
+      /* --- 头部内边距收紧 --- */
+      header > div { padding-left: 0.75rem; padding-right: 0.75rem; }
+
+      /* --- 主内容区 --- */
+      main { padding-left: 0.75rem; padding-right: 0.75rem; padding-top: 1rem; }
+
+      /* --- 搜索 & 添加单词行 --- */
+      #searchInput, #addWordInput {
+        font-size: 16px;  /* 防止 iOS 缩放 */
+        padding-top: 0.65rem;
+        padding-bottom: 0.65rem;
+      }
+      #addWordBtn {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        font-size: 0.8rem;
+        white-space: nowrap;
+      }
+
+      /* --- 卡片网格：单列 --- */
+      #cardGrid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      /* --- 卡片内部微调 --- */
+      #cardGrid .h-\[235px\] {
+        height: auto;
+        min-height: 200px;
+      }
+
+      /* --- 移动端左侧词性筛选菜单 --- */
+      #leftSidebar.mobile-sidebar-open {
+        display: block;
+        position: fixed;
+        top: 57px;
+        left: 0;
+        z-index: 50;
+        width: 180px;
+        max-height: calc(100vh - 57px);
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+        border-right: 1px solid rgba(0, 0, 0, 0.06);
+      }
+      .dark #leftSidebar.mobile-sidebar-open {
+        background: rgba(20, 20, 27, 0.94);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+      }
+
+      /* --- 移动端右侧记忆统计面板 --- */
+      #mobileStatsPanel:not(.hidden) {
+        display: block;
+        margin-top: 1rem;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+      }
+      .dark #mobileStatsPanel:not(.hidden) {
+        background: rgba(20, 20, 27, 0.85);
+      }
+
+      /* --- 模态框：移动端全屏 --- */
+      #wordModal > .relative {
+        width: 100vw;
+        max-width: 100vw;
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+        margin: 0;
+      }
+      #wordModal .p-8 {
+        padding: 1.25rem;
+      }
+      #modalWord {
+        font-size: 1.75rem;
+        line-height: 1.2;
+      }
+
+      /* --- Toast：移动端底部居中 --- */
+      .toast {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1.25rem;
+        font-size: 0.8rem;
+        padding: 0.6rem 1rem;
+        text-align: center;
+        justify-content: center;
+        border-radius: 0.75rem;
+        max-width: calc(100vw - 2rem);
+      }
+
+      /* --- 导入区域 --- */
+      #importTextarea { font-size: 16px; }
+
+      /* --- 激活筛选标签换行 --- */
+      #activeFilters { gap: 0.4rem; }
+    }
   </style>
 </head>
 <body class="min-h-screen bg-[#fafaf9] dark:bg-[#0f0f13] text-gray-800 dark:text-gray-200 antialiased">
@@ -1331,22 +1463,14 @@
     var mobilePosToggle = document.getElementById('mobilePosToggle');
     var mobileStatsToggle = document.getElementById('mobileStatsToggle');
 
-    mobilePosToggle.addEventListener('click', function() {
+    mobilePosToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
       leftSidebar.classList.toggle('hidden');
-      if (!leftSidebar.classList.contains('hidden')) {
-        leftSidebar.style.position = 'fixed';
-        leftSidebar.style.top = '57px';
-        leftSidebar.style.left = '0';
-        leftSidebar.style.zIndex = '30';
-        leftSidebar.style.width = '180px';
-        leftSidebar.style.maxHeight = 'calc(100vh - 57px)';
-        leftSidebar.style.overflowY = 'auto';
-        leftSidebar.style.background = 'white';
-        leftSidebar.style.boxShadow = '0 10px 40px rgba(0,0,0,0.12)';
-      }
+      leftSidebar.classList.toggle('mobile-sidebar-open');
     });
 
-    mobileStatsToggle.addEventListener('click', function() {
+    mobileStatsToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
       mobileStatsPanel.classList.toggle('hidden');
     });
 
@@ -1356,15 +1480,7 @@
           e.target !== mobilePosToggle &&
           !mobilePosToggle.contains(e.target)) {
         leftSidebar.classList.add('hidden');
-        leftSidebar.style.position = '';
-        leftSidebar.style.top = '';
-        leftSidebar.style.left = '';
-        leftSidebar.style.zIndex = '';
-        leftSidebar.style.width = '';
-        leftSidebar.style.maxHeight = '';
-        leftSidebar.style.overflowY = '';
-        leftSidebar.style.background = '';
-        leftSidebar.style.boxShadow = '';
+        leftSidebar.classList.remove('mobile-sidebar-open');
       }
     });
 

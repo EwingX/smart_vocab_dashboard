@@ -242,18 +242,36 @@
         border-right: 1px solid rgba(255, 255, 255, 0.06);
       }
 
-      /* --- 移动端右侧记忆统计面板 --- */
-      #mobileStatsPanel:not(.hidden) {
-        display: block;
-        margin-top: 1rem;
-        padding: 1rem;
-        border-radius: 0.75rem;
-        background: rgba(255, 255, 255, 0.8);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
+      /* --- 移动端记忆统计浮层面板 --- */
+      #mobileStatsPanel {
+        position: fixed;
+        top: 57px;
+        right: 8px;
+        z-index: 35;
+        width: 210px;
+        max-height: calc(100vh - 80px);
+        overflow-y: auto;
+        padding: 0.9rem;
+        border-radius: 0.85rem;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.13);
+        border: 1px solid rgba(0, 0, 0, 0.07);
+        transform: translateY(-6px);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.18s ease;
       }
-      .dark #mobileStatsPanel:not(.hidden) {
-        background: rgba(20, 20, 27, 0.85);
+      .dark #mobileStatsPanel {
+        background: rgba(22, 22, 30, 0.95);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+        border-color: rgba(255, 255, 255, 0.07);
+      }
+      #mobileStatsPanel.stats-panel-open {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
       }
 
       /* --- 模态框：移动端全屏 --- */
@@ -417,7 +435,7 @@
         <p class="text-gray-300 dark:text-gray-600 text-xs mt-1">试试其他筛选条件，或添加新单词</p>
       </div>
 
-      <div id="mobileStatsPanel" class="lg:hidden hidden mt-6 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"></div>
+      <div id="mobileStatsPanel" class="lg:hidden mt-6 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"></div>
     </main>
 
     <!-- ===== 右侧边栏：记忆曲线追踪面板 ===== -->
@@ -1475,25 +1493,39 @@
 
     mobilePosToggle.addEventListener('click', function(e) {
       e.stopPropagation();
+      // 打开词性面板时关闭统计面板
+      if (leftSidebar.classList.contains('hidden')) {
+        mobileStatsPanel.classList.remove('stats-panel-open');
+      }
       leftSidebar.classList.toggle('hidden');
       leftSidebar.classList.toggle('mobile-sidebar-open');
     });
 
     mobileStatsToggle.addEventListener('click', function(e) {
       e.stopPropagation();
-      mobileStatsPanel.classList.toggle('hidden');
-      if (!mobileStatsPanel.classList.contains('hidden')) {
-        mobileStatsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // 打开统计面板时关闭词性面板
+      if (!mobileStatsPanel.classList.contains('stats-panel-open')) {
+        leftSidebar.classList.add('hidden');
+        leftSidebar.classList.remove('mobile-sidebar-open');
       }
+      mobileStatsPanel.classList.toggle('stats-panel-open');
     });
 
     document.addEventListener('click', function(e) {
+      // 关闭词性侧栏
       if (!leftSidebar.classList.contains('hidden') &&
           !leftSidebar.contains(e.target) &&
           e.target !== mobilePosToggle &&
           !mobilePosToggle.contains(e.target)) {
         leftSidebar.classList.add('hidden');
         leftSidebar.classList.remove('mobile-sidebar-open');
+      }
+      // 关闭统计浮层
+      if (mobileStatsPanel.classList.contains('stats-panel-open') &&
+          !mobileStatsPanel.contains(e.target) &&
+          e.target !== mobileStatsToggle &&
+          !mobileStatsToggle.contains(e.target)) {
+        mobileStatsPanel.classList.remove('stats-panel-open');
       }
     });
 

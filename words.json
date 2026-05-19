@@ -29,16 +29,47 @@
           "phrase": "scientific paradigm",
           "meaning": "科学范式"
         }
-      ]
+      ],
+      "id": "75bfb461-23d8-476f-8361-7e7f86bde279",
+      "review_date": "2026-05-19"
     },
     {
       "word": "empirical",
-      "phonetic": "/ɪmˈpɪrɪkəl/",
-      "definition": "adj. 经验主义的，以观察为依据的",
-      "sentence": "The researcher insisted that all conclusions must be grounded in empirical evidence rather than speculation.",
-      "translation": "研究者坚持所有结论必须建立在经验证据之上，而非推测。",
+      "phonetic": "/ɪmˈpɪrɪkl/",
+      "definition": "adj. 经验主义的；以经验为依据的",
+      "sentence": "The empirical evidence strongly supports the hypothesis that climate change is driven by human activities.",
+      "translation": "经验证据强烈支持气候变化是由人类活动驱动的这一假设。",
       "mastery_stage": 1,
-      "type": "word"
+      "type": "word",
+      "variations": [
+        {
+          "form": "empirically",
+          "pos": "adv.",
+          "meaning": "经验地；以经验为依据地"
+        },
+        {
+          "form": "empiricism",
+          "pos": "n.",
+          "meaning": "经验主义；经验论"
+        },
+        {
+          "form": "empiricist",
+          "pos": "n.",
+          "meaning": "经验主义者"
+        }
+      ],
+      "phrases": [
+        {
+          "phrase": "empirical research",
+          "meaning": "实证研究"
+        },
+        {
+          "phrase": "empirical data",
+          "meaning": "经验数据"
+        }
+      ],
+      "id": "52e3f234-f24f-4c60-955e-131236cb85e7",
+      "review_date": "2026-05-19"
     },
     {
       "word": "ambiguous",
@@ -47,7 +78,9 @@
       "sentence": "The contract contained several ambiguous clauses that led to prolonged litigation.",
       "translation": "该合同包含若干模棱两可的条款，导致了旷日持久的诉讼。",
       "mastery_stage": 2,
-      "type": "word"
+      "type": "word",
+      "id": "ff88875f-ec8b-4c9c-b15d-b8b36c8e8225",
+      "review_date": "2026-05-22"
     },
     {
       "word": "articulate",
@@ -56,7 +89,9 @@
       "sentence": "She is remarkably articulate when explaining complex philosophical concepts to undergraduates.",
       "translation": "她在向本科生解释复杂的哲学概念时表现得异常清晰。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "0a81a47a-b8a9-4af5-8525-e22247c5069c",
+      "review_date": "2026-05-19"
     },
     {
       "word": "delineate",
@@ -65,7 +100,9 @@
       "sentence": "The report meticulously delineates the boundaries between public and private responsibilities.",
       "translation": "这份报告细致地描绘了公共责任与私人责任之间的界限。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "ce54012a-58fb-4a9d-9094-8996d45ffe76",
+      "review_date": "2026-05-19"
     },
     {
       "word": "elucidate",
@@ -74,7 +111,9 @@
       "sentence": "The professor used a series of diagrams to elucidate the intricate mechanism of gene regulation.",
       "translation": "教授用一系列图表来阐明基因调控的复杂机制。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "529db431-f1d5-468f-bb0d-ce4fcb0ac38f",
+      "review_date": "2026-05-19"
     },
     {
       "word": "facilitate",
@@ -83,7 +122,9 @@
       "sentence": "Digital platforms have greatly facilitated cross-border academic collaboration in recent years.",
       "translation": "近年来，数字平台极大地促进了跨境学术合作。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "8053241e-1b6b-4037-bf2b-f46292930d63",
+      "review_date": "2026-05-19"
     },
     {
       "word": "gregarious",
@@ -92,7 +133,9 @@
       "sentence": "Contrary to the stereotype of the solitary scholar, many eminent scientists are highly gregarious.",
       "translation": "与孤独学者的刻板印象相反，许多杰出科学家都非常热衷社交。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "f434d922-9ec5-4662-a926-2298564fc09f",
+      "review_date": "2026-05-19"
     },
     {
       "word": "hypothesis",
@@ -101,7 +144,9 @@
       "sentence": "The null hypothesis was rejected after rigorous statistical analysis of the clinical trial data.",
       "translation": "在对临床试验数据进行严格的统计分析后，零假设被拒绝了。",
       "mastery_stage": 1,
-      "type": "word"
+      "type": "word",
+      "id": "a60e6252-4b5f-4716-932e-b3c0ccdace78",
+      "review_date": "2026-05-19"
     },
     {
       "word": "immutable",
@@ -110,7 +155,9 @@
       "sentence": "The philosopher argued that while physical laws are immutable, human perceptions of them evolve constantly.",
       "translation": "这位哲学家认为，虽然物理法则是永恒不变的，但人类对它们的认知却在不断演进。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "21da4136-5476-40ac-88cd-0e6c994ea3e2",
+      "review_date": "2026-05-19"
     },
     {
       "word": "juxtapose",
@@ -119,7 +166,9 @@
       "sentence": "The author juxtaposes the protagonist's idealism with the antagonist's cynicism to highlight the novel's central tension.",
       "translation": "作者将主人公的理想主义与反角的犬儒主义并列对比，以突出小说的核心张力。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "2ce50c27-e90d-4e89-b4c3-983c9cbc0b69",
+      "review_date": "2026-05-19"
     },
     {
       "word": "lucid",
@@ -128,7 +177,9 @@
       "sentence": "Despite the complexity of the subject, her lecture remained remarkably lucid throughout.",
       "translation": "尽管主题复杂，她的讲座自始至终都异常清晰透彻。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "4f7b19dc-6244-4301-8856-af715df2ebb9",
+      "review_date": "2026-05-19"
     },
     {
       "word": "metamorphosis",
@@ -137,7 +188,9 @@
       "sentence": "Kafka's novella depicts a surreal metamorphosis that serves as an allegory for modern alienation.",
       "translation": "卡夫卡的中篇小说描绘了一次超现实的蜕变，以此隐喻现代社会的异化。",
       "mastery_stage": 1,
-      "type": "word"
+      "type": "word",
+      "id": "9778bad1-bfad-42d2-aeaa-f405871f5169",
+      "review_date": "2026-05-19"
     },
     {
       "word": "nostalgia",
@@ -146,7 +199,9 @@
       "sentence": "The resurgence of vinyl records reflects a collective nostalgia for tangible media in a digital age.",
       "translation": "黑胶唱片的复兴反映了数字时代人们对实体媒介的集体怀旧。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "66f14971-fbc7-4716-97e4-9f63d3dae9c2",
+      "review_date": "2026-05-19"
     },
     {
       "word": "obsolete",
@@ -155,7 +210,9 @@
       "sentence": "Technologies that were cutting-edge a decade ago are now rendered obsolete by the relentless pace of innovation.",
       "translation": "十年前的前沿技术如今已被无情的创新速度所淘汰。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "3280f2a1-b0ea-4a10-b737-ae772119d8d7",
+      "review_date": "2026-05-19"
     },
     {
       "word": "pragmatic",
@@ -164,7 +221,9 @@
       "sentence": "Faced with budget constraints, the committee adopted a pragmatic approach rather than pursuing an idealistic blueprint.",
       "translation": "面对预算限制，委员会采取了务实的方法，而非追求理想化的蓝图。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "c9a8d849-a38d-4ada-b249-faff99623405",
+      "review_date": "2026-05-19"
     },
     {
       "word": "resilient",
@@ -173,7 +232,9 @@
       "sentence": "Children growing up in adversity often develop remarkably resilient coping mechanisms.",
       "translation": "在逆境中长大的孩子往往会发展出异常坚韧的应对机制。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "7ae03a85-b89f-4c30-a55e-17988dec7ceb",
+      "review_date": "2026-05-19"
     },
     {
       "word": "synthesize",
@@ -182,7 +243,9 @@
       "sentence": "The ability to synthesize disparate sources of information is a hallmark of critical thinking.",
       "translation": "综合不同来源信息的能力是批判性思维的标志。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "ab13d789-6c6d-4f1c-8e8d-ec82f3945fce",
+      "review_date": "2026-05-19"
     },
     {
       "word": "ubiquitous",
@@ -191,7 +254,9 @@
       "sentence": "Smartphones have become so ubiquitous that it is now difficult to imagine daily life without them.",
       "translation": "智能手机已变得如此普及，如今很难想象没有它们的日常生活。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "cab1493e-3b74-44ae-b8cd-e040c50fc232",
+      "review_date": "2026-05-19"
     },
     {
       "word": "vulnerable",
@@ -200,7 +265,9 @@
       "sentence": "Coastal ecosystems are particularly vulnerable to the effects of rising sea temperatures.",
       "translation": "沿海生态系统对海水升温的影响尤为脆弱。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "956a2c51-1fe7-4988-9059-695d13ebc215",
+      "review_date": "2026-05-19"
     },
     {
       "word": "collaboration",
@@ -209,7 +276,9 @@
       "sentence": "The success of the research project depended on close collaboration between the two laboratories.",
       "translation": "该研究项目的成功依赖于两个实验室之间的密切合作。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "3a66483e-835a-414b-a1a0-ecad9f1b37d9",
+      "review_date": "2026-05-19"
     },
     {
       "word": "henceforth",
@@ -218,7 +287,9 @@
       "sentence": "Henceforth, all research proposals must be submitted to the ethics committee for approval.",
       "translation": "从此以后，所有研究提案都必须提交给伦理委员会审批。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "84b259f8-3d78-4e85-950f-5a10b311a401",
+      "review_date": "2026-05-19"
     },
     {
       "word": "sensor",
@@ -227,7 +298,9 @@
       "sentence": "The sensor detects changes in temperature and transmits the data to the central processing unit.",
       "translation": "传感器检测温度变化并将数据传输到中央处理器。",
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "52ba5936-fbe4-4b84-af84-bd36395d168e",
+      "review_date": "2026-05-19"
     },
     {
       "word": "pick up",
@@ -236,18 +309,47 @@
       "sentence": "Students can pick up new vocabulary quickly through extensive reading of academic journals.",
       "translation": "学生通过广泛阅读学术期刊可以快速学会新词汇。",
       "mastery_stage": 0,
-      "type": "phrase"
+      "type": "phrase",
+      "id": "0bf5b34b-bde1-4f2d-b672-b0a0b155c1a5",
+      "review_date": "2026-05-19"
     },
     {
       "word": "impulse",
-      "phonetic": "",
-      "definition": "（待完善 — 请手动编辑或配置 AI Key）",
-      "sentence": "",
-      "translation": "",
-      "variations": [],
-      "phrases": [],
+      "phonetic": "/ˈɪmpʌls/",
+      "definition": "n. 冲动；推动力",
+      "sentence": "The impulse to innovate is often driven by the need to solve complex problems in scientific research.",
+      "translation": "创新的冲动往往源于解决科学研究中复杂问题的需求。",
+      "variations": [
+        {
+          "form": "impulsive",
+          "pos": "adj.",
+          "meaning": "冲动的"
+        },
+        {
+          "form": "impulsively",
+          "pos": "adv.",
+          "meaning": "冲动地"
+        },
+        {
+          "form": "impulsiveness",
+          "pos": "n.",
+          "meaning": "冲动性"
+        }
+      ],
+      "phrases": [
+        {
+          "phrase": "on impulse",
+          "meaning": "一时冲动"
+        },
+        {
+          "phrase": "impulse response",
+          "meaning": "脉冲响应"
+        }
+      ],
       "mastery_stage": 0,
-      "type": "word"
+      "type": "word",
+      "id": "b8acbb52-3412-47b4-ac12-712fe0881d33",
+      "review_date": "2026-05-19"
     }
   ]
 }

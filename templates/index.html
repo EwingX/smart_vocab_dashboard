@@ -384,20 +384,17 @@
         <div class="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-gray-800">
           <div class="flex items-center gap-3">
             <span id="modalStageLabel" class="text-sm text-gray-500 dark:text-gray-400"></span>
-            <span class="text-xs text-gray-300 dark:text-gray-600 hidden sm:inline">← → 调整阶段</span>
           </div>
           <div class="flex items-center gap-2">
             <button id="modalDemoteBtn"
-                    class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20"
+                    class="flex items-center justify-center w-10 h-10 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20"
                     title="退回上一级">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 7l-5 5m0 0l5 5m-5-5h12"/></svg>
-              <span id="modalDemoteText">退回</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M11 7l-5 5m0 0l5 5m-5-5h12"/></svg>
             </button>
             <button id="modalPromoteBtn"
-                    class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95"
+                    class="flex items-center justify-center w-10 h-10 rounded-xl text-sm font-medium transition-all active:scale-95"
                     title="晋升熟记阶段">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
-              <span id="modalPromoteText">晋升</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
             </button>
           </div>
         </div>
@@ -498,9 +495,7 @@
     var modalTranslation = document.getElementById('modalTranslation');
     var modalStageLabel  = document.getElementById('modalStageLabel');
     var modalPromoteBtn  = document.getElementById('modalPromoteBtn');
-    var modalPromoteText = document.getElementById('modalPromoteText');
     var modalDemoteBtn   = document.getElementById('modalDemoteBtn');
-    var modalDemoteText  = document.getElementById('modalDemoteText');
     var modalEnrichBtn   = document.getElementById('modalEnrichBtn');
     var modalDeleteBtn   = document.getElementById('modalDeleteBtn');
     var modalVariationsWrap = document.getElementById('modalVariationsWrap');
@@ -1293,11 +1288,12 @@
 
       // 晋升按钮
       var promoteClass = PROMOTE_CLASSES[stage];
-      modalPromoteBtn.className = 'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20 ' + promoteClass;
-      modalPromoteText.textContent = stage >= 3 ? '重新学习' : '晋升为「' + STAGE_LABELS[nextStage] + '」';
+      modalPromoteBtn.className = 'flex items-center justify-center w-10 h-10 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20 ' + promoteClass;
+      var promoteTitle = stage >= 3 ? '重新学习' : '晋升为「' + STAGE_LABELS[nextStage] + '」';
       if (stage > 0 && stage < 3 && nextStage <= 3) {
-        modalPromoteText.textContent += '（' + REVIEW_LABELS[nextStage] + '后复习）';
+        promoteTitle += '（' + REVIEW_LABELS[nextStage] + '后复习）';
       }
+      modalPromoteBtn.title = promoteTitle;
       modalPromoteBtn.onclick = function() { promoteStage(modalId); };
 
       // 退回按钮
@@ -1306,8 +1302,8 @@
       } else {
         modalDemoteBtn.classList.remove('hidden');
         var demoteClass = DEMOTE_CLASSES[stage];
-        modalDemoteBtn.className = 'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20 ' + demoteClass;
-        modalDemoteText.textContent = '退回「' + STAGE_LABELS[prevStage] + '」';
+        modalDemoteBtn.className = 'flex items-center justify-center w-10 h-10 rounded-xl text-sm font-medium transition-all active:scale-95 border border-current/20 ' + demoteClass;
+        modalDemoteBtn.title = '退回「' + STAGE_LABELS[prevStage] + '」';
         modalDemoteBtn.onclick = function() { adjustStage(modalId, -1); };
       }
     }
